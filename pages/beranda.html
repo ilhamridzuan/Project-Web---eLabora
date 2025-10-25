@@ -1,25 +1,141 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>eLabora - beranda</title>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-</head>
-<body>
-    <div id="header"></div>
-    <div class="layout">
-      <div id="sidebar"></div>
-      <main class="content">
-        
-      </main>
-    </div>
 
-    <script>
-      $(function () {
-        $("#header").load("../components/header.html");
-        $("#sidebar").load("../components/sidebar.html");
-      });
-    </script>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>eLabora - beranda</title>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  <link rel="stylesheet" href="/assets/css/beranda.css">
+</head>
+
+<body>
+  <div id="header"></div>
+  <div class="layout">
+    <div id="sidebar"></div>
+    <main class="content">
+      <div class="header-beranda">
+        <h2>Beranda</h2>
+      </div>
+      <!-- Carousel -->
+      <div class="carousel-wrapper">
+        <div class="carousel-container">
+          <div class="carousel-slide active">
+            <img src="/assets/img/Laboratory-amico.png" alt="Slide 1" />
+          </div>
+          <div class="carousel-slide">
+            <img src="/assets/img/Laboratory-bro.png" alt="Slide 2" />
+          </div>
+          <div class="carousel-slide">
+            <img src="/assets/img/Laboratory-rafiki.png" alt="Slide 3" />
+          </div>
+
+          <!-- Tombol navigasi -->
+          <button class="carousel-btn prev">&#10094;</button>
+          <button class="carousel-btn next">&#10095;</button>
+        </div>
+      </div>
+
+      <!-- Card Menu -->
+      <section class="menu-cards">
+        <div class="menu-card">
+          <img src="/assets/img/lucide_clipboard-pen-line.png" alt="icon Pendaftaran">
+          <h3>Pendaftaran</h3>
+        </div>
+        <div class="menu-card">
+          <img src="/assets/img/tabler_microscope.png" alt="icon Pemeriksaan  ">
+          <h3>Cek Hasil Pemeriksaan</h3>
+        </div>
+        <div class="menu-card">
+          <img src="/assets/img/material-symbols-light_history-rounded.png" alt="">
+          <h3>Riwayat Pemeriksaan</h3>
+        </div>
+      </section>
+
+      <!-- Bagian Antrian Laboratorium -->
+      <section class="queue-section">
+        <!-- Tabel Antrian Laboratorium -->
+        <div class="queue-table card">
+          <h3>Daftar Antrian Laboratorium Hari Ini</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>No. Antrian</th>
+                <th>Nama Pasien</th>
+                <th>Jenis Pemeriksaan</th>
+                <th>Status</th>
+                <th>Waktu</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>A001</td>
+                <td>Ahmad Wijaya</td>
+                <td>Patologi</td>
+                <td><span class="status ongoing">Sedang Dilayani</span></td>
+                <td>08:30</td>
+              </tr>
+              <tr>
+                <td>A002</td>
+                <td>Siti Nurhaliza</td>
+                <td>Anatomi</td>
+                <td><span class="status waiting">Menunggu</span></td>
+                <td>08:45</td>
+              </tr>
+              <tr>
+                <td>A003</td>
+                <td>Budi Sentosa</td>
+                <td>Mikrobiologi</td>
+                <td><span class="status waiting">Menunggu</span></td>
+                <td>09:00</td>
+              </tr>
+              <tr>
+                <td>A004</td>
+                <td>Ahmad Solikin</td>
+                <td>Anatomi</td>
+                <td><span class="status waiting">Menunggu</span></td>
+                <td>09:15</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- Informasi Antrian User Saat Ini -->
+        <div class="queue-info card">
+          <h3>Informasi Antrian Anda</h3>
+
+          <div class="info-box-nomor">
+            <h4>Nomor Antrian</h4>
+            <p>A004</p>
+          </div>
+
+          <div class="info-box">
+            <h4>Nama Pasien</h4>
+            <p>Muhammad Soekarno</p>
+          </div>
+
+          <div class="info-box">
+            <h4>Jenis Pemeriksaan</h4>
+            <p>Anatomi</p>
+          </div>
+
+          <div class="info-box">
+            <h4>Waktu tunggu</h4>
+            <p>60 Menit</p>
+          </div>
+
+          <div class="info-box">
+            <h4>Lokasi Ruang</h4>
+            <p>Ruang B</p>
+          </div>
+        </div>
+  </div>
+  </section>
+  </div>
+  </main>
+  </div>
+  <div id="footer"></div>
+  <script src="/assets/js/beranda.js"></script>
 </body>
+
 </html>
