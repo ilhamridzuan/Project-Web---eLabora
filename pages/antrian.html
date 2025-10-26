@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>eLabora - Pendaftaran</title>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="/assets/js/scripts.js"></script>
+    <link rel="stylesheet" href="/assets/css/styles.css">
+    <link rel="stylesheet" href="/assets/css/antrian.css">
+</head>
+<body>
+    <div id="header"></div>
+    <div class="layout">
+      <div id="sidebar"></div>
+      <main class="content">
+        <header class="header-antrian">
+            <div class="logo-section">
+                <img src="/assets/img/Logo.png" alt="Logo eLabora" class="logo-img">
+                <div class="title-section">
+                    <h1>Pendaftaran Pemeriksaan Laboratorium</h1>
+                    <p>Sistem Pendaftaran Tes Lab Online</p>
+                </div>
+            </div>
+            <nav class="tabs">
+                <button id="btnPendaftaran">Pendaftaran Baru</button>
+                <button id="btnAntrian">Antrian</button>
+            </nav>
+        </header>
+        <div class="container-antrian">
+            <section class="stats-grid">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <span class="live">Live</span>
+                    </div>
+                    <h1>001</h1>
+                    <p>Nomor Antrian Saat Ini</p>
+                </div>
+
+                <div class="card">
+                    <div class="icon"></div>
+                    <h2>0</h2>
+                    <p>Pasien Menunggu</p>
+                </div>
+
+                <div class="card">
+                    <div class="icon"></div>
+                    <h2>0</h2>
+                    <p>Sudah Dilayani</p>
+                </div>
+
+                <div class="card">
+                    <div class="icon"></div>
+                    <h2>0/20</h2>
+                    <p>Kapasitas Hari Ini</p>
+                </div>
+            </section>
+            <section class="main-grid">
+                <div class="service">
+                    <h3> Sedang Dilayani</h3>
+                    <div class="content-empty">
+                        <span class="icon-empty"></span>
+                        <p>Belum ada pasien</p>
+                    </div>
+                    <div class="service-footer">
+                        <button class="btn-secondary">Sebelumnya</button>
+                        <button class="btn-primary">Selanjutnya</button>
+                    </div>
+                </div>
+                    <div class="queue-list">
+                        <div class="queue-header">
+                            <h3>Daftar Antrian Hari Ini</h3>
+                            <span class="total">Total: 0</span>
+                        </div>
+                        <div class="content-empty">
+                            <span class="icon-empty"></span>
+                            <p>Belum ada pendaftaran hari ini</p>
+                            <small>Pasien akan muncul di sini setelah mendaftar</small>
+                        </div>
+                    </div>
+            </section>
+            <div class="today-card">
+                <div class="icon-calendar"></div>
+                <p>Antrian Hari Ini</p>
+                <h4>Sabtu, 25 Oktober 2025</h4>
+            </div>
+        </div>
+      </main>
+    </div>
+    <script>
+      $(function () {
+        $("#header").load("../components/header.html");
+        $("#sidebar").load("../components/sidebar.html");
+      });
+    </script>
+</body>
+</html>
