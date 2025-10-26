@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eLabora - Detail Pemeriksaan</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/hasilPemeriksaan.css" />
+   <link rel="stylesheet" href="/assets/css/styles.css" />
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <div class="layout">
+    <div id="sidebar"></div>
+
+    <main class="content">
+      <button class="back-btn" onclick="window.location.href='hasilPemeriksaan.html'">Kembali ke Daftar</button>
+
+      <!-- Detail Pemeriksaan -->
+      <section class="detail-card">
+        <h3>Detail Pemeriksaan</h3>
+        <div class="detail-info">
+          <p><b>Nama Pasien</b><br />Nunung</p>
+          <p><b>Jenis Pemeriksaan</b><br />Pemeriksaan Mikrobiologi</p>
+          <p><b>Kategori</b><br /><span class="badge blue">Mikrobiologi</span></p>
+          <p><b>Status</b><br /><span class="badge green">Selesai</span></p>
+          <p><b>Tanggal & Waktu</b><br />Kamis, 05 Juni 2025<br />Pukul 12.30</p>
+          <p><b>No. Laboratorium</b><br />252342123 - OM7346123</p>
+        </div>
+      </section>
+
+      <div class="preview-img">
+        <img id="labImage" src="/assets/img/hasilLab.jpg" alt="Hasil Pemeriksaan" />
+      </div>
+      </section>
+      <!-- Aksi Cepat -->
+      <section class="actions">
+        <button class="btn blue">Unduh PDF</button>
+      </section>
+    </main>
+  </div>
+
+
+
+  <!-- JS -->
+  <script src="/assets/js/scripts.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>eLabora - Hasil Pemeriksaan</title>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/assets/css/hasilPemeriksaan.css" />
+  <link rel="stylesheet" href="/assets/css/styles.css" />
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+</head>
+
+<body>
+  <div id="header"></div>
+
+  <div class="layout">
+    <div id="sidebar"></div>
+
+    <main class="content">
+      <!-- Search dan Filter -->
+      <div class="search-filter">
+        <input type="text" id="searchInput" placeholder="Cari berdasarkan nomor lab" />
+        <div class="filter-btns">
+          <button class="filter active" data-type="all">Semua</button>
+          <button class="filter" data-type="Patologi">Patologi</button>
+          <button class="filter" data-type="Anatomi">Anatomi</button>
+          <button class="filter" data-type="Mikrobiologi">Mikrobiologi</button>
+        </div>
+      </div>
+
+      <h3><span id="count"></span> Hasil Ditemukan</h3>
+
+      <!-- List hasil -->
+      <div id="examList" class="exam-list"></div>
+      <section class="hasil-list">
+
+        <div class="card-hasil" data-jenis="Pemeriksaan Mikrobiologi" data-kategori="Mikrobiologi" data-status="Selesai"
+          data-tanggal="Kamis, 05 Juni 2025" data-waktu="12.30" data-lab="252342123">
+          <div class="card-icon"></div>
+          <div class="card-info">
+            <h3>Pemeriksaan Mikrobiologi</h3>
+            <p>Kamis, 05 Juni 2025</p>
+            <p>Pukul 12.30</p>
+            <hr />
+            <p>No. Lab: 252342123</p>
+          </div>
+          <span class="card-status">Selesai</span>
+          <span class="arrow">›</span>
+        </div>
+
+        <div class="card-hasil" data-jenis="Pemeriksaan Patologi" data-kategori="Patologi"
+          data-status="Selesai" data-tanggal="Kamis, 05 Juni 2025" data-waktu="11.00" data-lab="252342124">
+          <div class="card-icon"></div>
+          <div class="card-info">
+            <h3>Pemeriksaan Patol</h3>
+            <p>Kamis, 05 Juni 2025</p>
+            <p>Pukul 11.00</p>
+            <hr />
+            <p>No. Lab: 252342124</p>
+          </div>
+          <span class="card-status">Selesai</span>
+          <span class="arrow">›</span>
+        </div>
+
+        <div class="card-hasil" data-jenis="Pemeriksaan Anatomi" data-kategori="Anatomi" data-status="Selesai"
+          data-tanggal="Kamis, 05 Juni 2025" data-waktu="10.00" data-lab="252342125">
+          <div class="card-icon"></div>
+          <div class="card-info">
+            <h3>Pemeriksaan Anatomi</h3>
+            <p>Kamis, 05 Juni 2025</p>
+            <p>Pukul 10.00</p>
+            <hr />
+            <p>No. Lab: 252342125</p>
+          </div>
+          <span class="card-status">Selesai</span>
+          <span class="arrow">›</span>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- JS -->
+  <script src="/assets/js/scripts.js"></script>
+
+</body>
+</html>
