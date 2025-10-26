@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>eLabora — Riwayat Pemeriksaan</title>
+
+  <!-- Font Satoshi -->
+  <link rel="stylesheet" href="../assets/css/styles.css" />
+
+  <!-- Styling halaman riwayat -->
+  <link rel="stylesheet" href="../assets/css/riwayat.css" />
+</head>
+<body>
+  <div id="header"></div>
+
+  <div class="layout">
+    <div id="sidebar"></div>
+
+    <main class="content" aria-labelledby="page-title">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <h1 id="page-title" class="title">Riwayat Pemeriksaan</h1>
+        <div class="tools">
+          <label for="filterKat" class="label">Kategori</label>
+          <select id="filterKat" class="select">
+            <option value="Semua" selected>Semua</option>
+            <option value="Patologi">Patologi</option>
+            <option value="Anatomi">Anatomi</option>
+            <option value="Mikrobiologi">Mikrobiologi</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- List kartu -->
+      <section id="listRiwayat" class="cards" aria-live="polite"></section>
+
+      <!-- Empty state (opsional) -->
+      <div id="emptyState" hidden>Tidak ada data untuk kategori yang dipilih.</div>
+    </main>
+  </div>
+
+  <script>
+    async function loadFragment(targetSelector, url) {
+      const el = document.querySelector(targetSelector);
+      try {
+        const res = await fetch(url, { cache: "no-store" });
+        if (!res.ok) throw new Error(res.status + " " + res.statusText);
+        el.innerHTML = await res.text();
+      } catch (err) {
+        console.error("Gagal memuat", url, err);
+        el.innerHTML = ""; // atau tampilkan fallback
+      }
+    }
+
+    const dataRiwayat = [
+      { kategori: "Patologi",     judul: "Pemeriksaan Patologi",     tanggal: "Kamis, 05 Juni 2025 • 12.30", noLab: "252342123", noOrder: "OM7346123", status: "Menunggu Hasil" },
+      { kategori: "Patologi",     judul: "Pemeriksaan Patologi",     tanggal: "Kamis, 05 Juni 2025 • 12.30", noLab: "252342124", noOrder: "OM7346124", status: "Hasil Tersedia" },
+      { kategori: "Anatomi",      judul: "Pemeriksaan Anatomi",      tanggal: "Kamis, 05 Juni 2025 • 12.30", noLab: "252341000", noOrder: "OM456000",  status: "Dibatalkan" },
+      { kategori: "Mikrobiologi", judul: "Pemeriksaan Mikrobiologi", tanggal: "Jumat, 06 Juni 2025 • 08.10", noLab: "250010001", noOrder: "OM111001",  status: "Hasil Tersedia" },
+      { kategori: "Patologi",     judul: "Pemeriksaan Patologi",     tanggal: "Jumat, 06 Juni 2025 • 09.20", noLab: "253400112", noOrder: "OM658932",  status: "Menunggu Hasil" }
+    ];
+
+    const state = { filter: "Semua" };
+    const refs = {
+      list:   null,
+      select: null,
+      empty:  null,
+    };
+
+    const STATUS_CLASS = {
+      "Menunggu Hasil": "wait",
+      "Hasil Tersedia": "ok",
+      "Dibatalkan":     "cancel",
+    };
+
+    function el(tag, attrs = {}, ...children) {
+      const node = document.createElement(tag);
+      for (const [k, v] of Object.entries(attrs)) {
+        if (k === "class") node.className = v;
+        else if (k === "dataset") {
+          for (const [dk, dv] of Object.entries(v)) node.dataset[dk] = dv;
+        } else if (k.startsWith("aria-") || k === "role") {
+          node.setAttribute(k, v);
+        } else if (k === "text") {
+          node.textContent = v;
+        } else {
+          node[k] = v;
+        }
+      }
+      for (const c of children) {
+        if (c == null) continue;
+        if (typeof c === "string") node.appendChild(document.createTextNode(c));
+        else node.appendChild(c);
+      }
+      return node;
+    }
+
+    function buildIcon() {
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("width", "22");
+      svg.setAttribute("height", "22");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("fill", "none");
+      svg.setAttribute("aria-hidden", "true");
+
+      const p1 = document.createElementNS(ns, "path");
+      p1.setAttribute("d", "M9 3v5l-5 9a4 4 0 0 0 3.5 6h9a4 4 0 0 0 3.5-6l-5-9V3");
+      p1.setAttribute("stroke", "currentColor");
+      p1.setAttribute("stroke-width", "2");
+      p1.setAttribute("stroke-linecap", "round");
+      p1.setAttribute("stroke-linejoin", "round");
+
+      const p2 = document.createElementNS(ns, "path");
+      p2.setAttribute("d", "M9 8h6");
+      p2.setAttribute("stroke", "currentColor");
+      p2.setAttribute("stroke-width", "2");
+      p2.setAttribute("stroke-linecap", "round");
+
+      svg.append(p1, p2);
+      return svg;
+    }
+
+    function kategoriToClass(kat) {
+      if (kat === "Anatomi") return "anatomi";
+      if (kat === "Mikrobiologi") return "mikro";
+      return "patologi";
+    }
+
+    function buildCard(item) {
+      const warna = kategoriToClass(item.kategori);
+      const chipClass = STATUS_CLASS[item.status] || "wait";
+
+      const card = el("article", { class: `card ${warna}` });
+
+      const icon = el("div", { class: "icon", role: "img", "aria-label": "Ikon pemeriksaan" }, buildIcon());
+
+      const info = el("div", { class: "info" },
+        el("h3", {}, item.judul),
+        el("p",  {}, item.tanggal)
+      );
+
+      const chip = el("span", { class: `chip ${chipClass}` }, item.status);
+
+      const meta = el("div", { class: "meta" },
+        el("span", {}, item.noLab),
+        el("span", { class: "sep" }, "•"),
+        el("span", {}, item.noOrder),
+        el("span", { class: "sep" }, "•"),
+        el("span", {}, item.kategori),
+      );
+
+      card.append(icon, info, chip, meta);
+      return card;
+    }
+
+    // ====== Render ======
+    function render(list) {
+      const box = refs.list;
+      box.innerHTML = "";
+
+      if (!list || list.length === 0) {
+        refs.empty.hidden = false;
+        return;
+      }
+      refs.empty.hidden = true;
+
+      const frag = document.createDocumentFragment();
+      for (const item of list) {
+        frag.appendChild(buildCard(item));
+      }
+      box.appendChild(frag);
+    }
+
+    function applyFilter() {
+      if (state.filter === "Semua") {
+        render(dataRiwayat);
+      } else {
+        render(dataRiwayat.filter(i => i.kategori === state.filter));
+      }
+    }
+
+    // ====== Init ======
+    document.addEventListener("DOMContentLoaded", () => {
+      loadFragment("#header", "../components/header.html");
+      loadFragment("#sidebar", "../components/sidebar.html");
+
+      // cache refs
+      refs.list   = document.getElementById("listRiwayat");
+      refs.select = document.getElementById("filterKat");
+      refs.empty  = document.getElementById("emptyState");
+
+      // events
+      refs.select.addEventListener("change", () => {
+        state.filter = refs.select.value;
+        applyFilter();
+      });
+
+      // render awal
+      render(dataRiwayat);
+    });
+  </script>
+</body>
+</html>

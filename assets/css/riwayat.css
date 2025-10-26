@@ -1,0 +1,73 @@
+ .toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+  .title { margin: 0; font-size: 22px; color: #333; font-weight: 400; }
+  .tools { display: flex; align-items: center; gap: 8px; }
+  .label { font-size: 14px; color: #555; }
+  .select {
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid oklch(90% 0 0);
+    background: #fff;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .cards { display: grid; gap: 14px; max-width: 980px; }
+
+  .card {
+  display: grid;
+  grid-template-columns: 40px 1fr auto; 
+  column-gap: 12px;
+  row-gap: 8px;
+  align-items: center;
+
+  background: #fff;
+  border: 1px solid oklch(92% 0 0);
+  border-radius: 12px;
+  padding: 14px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+}
+  /* isi kartu */
+  .icon {
+    display: grid; place-items: center;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    color: oklch(45% .16 280);
+    background: oklch(97% .02 280);
+    border: 1px solid oklch(88% .04 280);
+  }
+  .info { min-width: 0; }
+  .info h3 { margin: 0; font-size: 18px; font-weight: 800; line-height: 1.2; }
+  .info p  { margin: 2px 0 0; font-size: 13px; color: #666; }
+
+  .chip {
+    justify-self: end;
+    white-space: nowrap;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 700;
+    border: 1px solid transparent;
+  }
+  .chip.wait   { background: oklch(96% .03 95); color:#6b7280; border-color: oklch(90% 0 0); }
+  .chip.ok     { background: oklch(94% .09 145); color: oklch(34% .17 145); border-color: oklch(86% .07 145); }
+  .chip.cancel { background: oklch(95% .10 27);  color: oklch(40% .18 27);  border-color: oklch(86% .09 27); }
+
+  .meta {
+    grid-column: 2 / 4; 
+    display: flex; gap: 10px; flex-wrap: wrap;
+    font-size: 13px; color: #555;
+    border-top: 1px dashed oklch(92% 0 0);
+    padding-top: 6px;
+  }
+  .meta .sep { color: #999; }
+
+  /* ====== Responsif ====== */
+  @media (max-width: 780px) {
+    .content { margin-left: 0; }
+    .title { font-size: 18px; }
+  }
