@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>eLabora — Riwayat Pemeriksaan</title>
-
-  <!-- Font Satoshi -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> 
   <link rel="stylesheet" href="../assets/css/styles.css" />
 
   <!-- Styling halaman riwayat -->
@@ -39,7 +38,7 @@
       <div id="emptyState" hidden>Tidak ada data untuk kategori yang dipilih.</div>
     </main>
   </div>
-
+  <script src="/assets/js/scripts.js"></script>
   <script>
     async function loadFragment(targetSelector, url) {
       const el = document.querySelector(targetSelector);
@@ -183,8 +182,6 @@
 
     // ====== Init ======
     document.addEventListener("DOMContentLoaded", () => {
-      loadFragment("#header", "../components/header.html");
-      loadFragment("#sidebar", "../components/sidebar.html");
 
       // cache refs
       refs.list   = document.getElementById("listRiwayat");
