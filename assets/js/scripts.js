@@ -34,13 +34,26 @@ function initSidebarNavigation() {
 // INDIKATOR MENU SIDEBAR AKTIF
 function highlightActiveMenu() {
     const currentPage = window.location.pathname.split("/").pop();
-    document.querySelectorAll(".menu-item").forEach((link) => {
-        const page = link.getAttribute("data-page");
-        if (page === currentPage) {
-            document.querySelectorAll(".menu-item").forEach((l) => l.classList.remove("active"));
-            link.classList.add("active");
-        }
-    });
+  const menuItems = document.querySelectorAll(".menu-item");
+
+  // Hilangkan dulu semua 'active'
+  menuItems.forEach((item) => item.classList.remove("active"));
+
+  // Loop tiap item untuk menentukan yang aktif
+  menuItems.forEach((link) => {
+    const page = link.getAttribute("data-page");
+
+    // Jika halaman antrian, tetap aktifkan menu pendaftaran
+    if (currentPage.includes("antrian") && page === "pendaftaran.html") {
+      link.classList.add("active");
+    } else if (currentPage.includes("detailPemeriksaan") && page === "hasilPemeriksaan.html") {
+      link.classList.add("active");
+    }
+    // Jika halaman normal lain, cocokkan langsung
+    else if (page === currentPage) {
+      link.classList.add("active");
+    }
+  });
 }
 
 // INTERAKSI CARD MENU DI BERANDA
