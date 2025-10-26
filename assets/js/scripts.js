@@ -1,24 +1,129 @@
+// LOAD HEADER DAN SIDEBAR
+document.addEventListener("DOMContentLoaded", () => {
+  loadComponent("../components/header.html", "#header");
+  loadComponent("../components/sidebar.html", "#sidebar", () => {
+    initSidebarNavigation();
+    highlightActiveMenu();
+  });
+});
+
+function loadComponent(filePath, targetSelector, callback) {
+  fetch(filePath)
+    .then((response) => {
+      if (!response.ok) throw new Error(`Gagal memuat ${filePath}`);
+      return response.text();
+    })
+    .then((html) => {
+      document.querySelector(targetSelector).innerHTML = html;
+      if (callback) callback();
+    })
+    .catch((err) => console.error("Error:", err));
+}
+
+// NAVIGASI SIDEBAR
+function initSidebarNavigation() {
+  document.querySelectorAll(".menu-item").forEach((link) => {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const page = link.getAttribute("data-page");
+      window.location.href = `../pages/${page}`;
+    });
+  });
+}
+
+// INDIKATOR MENU SIDEBAR AKTIF
+function highlightActiveMenu() {
+  const currentPage = window.location.pathname.split("/").pop();
+  document.querySelectorAll(".menu-item").forEach((link) => {
+    const page = link.getAttribute("data-page");
+    if (page === currentPage) {
+      document.querySelectorAll(".menu-item").forEach((l) => l.classList.remove("active"));
+      link.classList.add("active");
+    }
+  });
+}
+
+// INTERAKSI CARD MENU DI BERANDA
+document.addEventListener("click", (e) => {
+  const card = e.target.closest(".menu-card");
+  if (!card) return;
+  const targetPage = card.getAttribute("data-target");
+  if (!targetPage) return;
+
+  card.classList.add("clicked");
+  setTimeout(() => card.classList.remove("clicked"), 200);
+
+  window.location.href = `../pages/${targetPage}`;
+});
+
+// JQUERY ANIMASI CAROUSEL BERANDA
 $(document).ready(function () {
-//Pendaftaran dan Antrian Button Navigation
-  function setActiveButton(currentPage) {
-    $(".tabs button").removeClass("active");
+  let currentIndex = 0;
+  const slides = $(".carousel-slide");
+  const totalSlides = slides.length;
+
+  function showSlide(index) {
+    slides.removeClass("active");
+    slides.eq(index).addClass("active");
+  }
+
+  $(".next").click(function () {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    showSlide(currentIndex);
+  });
+
+  $(".prev").click(function () {
+    currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
+    showSlide(currentIndex);
+  });
+
+  // Auto slide setiap 5 detik
+  setInterval(() => {
+    currentIndex = (currentIndex + 1) % totalSlides;
+    showSlide(currentIndex);
+  }, 5000);
+});
+
+
+// PENDAFTARAN & ANTRIAN TAB NAVIGATION
+document.addEventListener("DOMContentLoaded", () => {
+  // Dapatkan nama file halaman saat ini
+  const currentPage = window.location.pathname.split("/").pop();
+
+  // Fungsi untuk mengatur tombol aktif
+  function setActiveButton() {
+    const btnPendaftaran = document.getElementById("btnPendaftaran");
+    const btnAntrian = document.getElementById("btnAntrian");
+
+    if (!btnPendaftaran || !btnAntrian) return;
+
+    btnPendaftaran.classList.remove("active");
+    btnAntrian.classList.remove("active");
 
     if (currentPage.includes("antrian")) {
-      $("#btnAntrian").addClass("active");
+      btnAntrian.classList.add("active");
     } else {
-      $("#btnPendaftaran").addClass("active");
+      btnPendaftaran.classList.add("active");
     }
   }
-  const currentPage = window.location.pathname;
-  setActiveButton(currentPage);
 
-  $(document).on("click", "#btnPendaftaran", function () {
-    window.location.href = "/pages/pendaftaran.html";
-  });
+  setActiveButton(); // Jalankan saat halaman dimuat
 
-  $(document).on("click", "#btnAntrian", function () {
-    window.location.href = "/pages/antrian.html";
-  });
+  // Event klik tombol
+  const btnPendaftaran = document.getElementById("btnPendaftaran");
+  const btnAntrian = document.getElementById("btnAntrian");
 
-  console.log("✅ Navigasi eLabora aktif (mode redirect langsung)");
+  if (btnPendaftaran) {
+    btnPendaftaran.addEventListener("click", () => {
+      window.location.href = "../pages/pendaftaran.html";
+    });
+  }
+
+  if (btnAntrian) {
+    btnAntrian.addEventListener("click", () => {
+      window.location.href = "../pages/antrian.html";
+    });
+  }
+
+  console.log("Navigasi tab Pendaftaran & Antrian aktif");
 });
