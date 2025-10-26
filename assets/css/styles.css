@@ -141,6 +141,7 @@ body {
     min-height: calc(100vh - 60px);
 }
 
+<<<<<<< Updated upstream
 @media (max-width: 768px) {
   .search-box {
     width: 70%;
@@ -155,3 +156,5 @@ body {
     font-size: 14px;
   }
 }
+=======
+>>>>>>> Stashed changes
