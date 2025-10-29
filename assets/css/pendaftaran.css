@@ -101,53 +101,52 @@
   grid-column: span 2;
 }
 
-label {
+.form-group label {
   font-weight: 500;
   margin-bottom: 0.25rem;
 }
 
-input, select, textarea {
+.form-group input, select, textarea {
   padding: 0.6rem 0.8rem;
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 0.95rem;
 }
 
-input:focus, select:focus, textarea:focus {
-  border-color: #4b7bec;
+.form-group input:focus, select:focus, textarea:focus {
+  border-color: #6B4EFF;
   outline: none;
   box-shadow: 0 0 0 3px rgba(75, 123, 236, 0.15);
 }
 
-textarea {
+.form-group textarea {
   resize: vertical;
   min-height: 80px;
 }
 
-/* Tombol Daftar Sekarang */
 .btn-submit {
-  display: block;               /* full width behavior */
-  width: 100%;                  /* isi seluruh lebar parent */
-  padding: 0.85rem;             /* tinggi proporsional */
+  display: block;         
+  width: 100%;                
+  padding: 0.85rem;            
   margin-top: 1.5rem;
-  background-color: #6B4EFF;    /* biru sesuai gambar */
-  color: #fff;                  /* teks putih */
+  background-color: #6B4EFF;    
+  color: #fff;                  
   border: none;
-  border-radius: 8px;           /* ujung agak membulat */
-  font-weight: 600;             /* tebal */
-  text-align: center;           /* teks rata tengah */
+  border-radius: 8px;           
+  font-weight: 600;             
+  text-align: center;          
   font-size: 0.95rem;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
 }
 
 .btn-submit:hover {
-  background-color: #5a3fdd;    /* sedikit lebih gelap saat hover */
-  transform: translateY(-1px);  /* sedikit naik saat hover */
+  background-color: #5a3fdd;  
+  transform: translateY(-1px);  
 }
 
 .btn-submit:active {
-  transform: translateY(0);     /* kembali ke posisi semula saat ditekan */
+  transform: translateY(0);
 }
 
 @media (max-width: 1000px) {
