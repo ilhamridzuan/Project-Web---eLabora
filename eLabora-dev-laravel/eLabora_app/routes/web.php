@@ -15,5 +15,8 @@ Route::get('/pendaftaran', function () {
     return view('pages.pasien.pendaftaran');
 });
 Route::get('/antrian', function () {
-    return view('pages.pasien.antrian');
+    return view('pages.pasien.antrian'); 
+});
+Route::get('/pasien/hasilPemeriksaan', function () {
+    return view('pages.pasien.hasilPemeriksaan');
 });
