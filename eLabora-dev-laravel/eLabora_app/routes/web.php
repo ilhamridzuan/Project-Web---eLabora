@@ -1,9 +1,11 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
 
 Route::get('/', function () {
-    return view('layouts.app');
+    // arahkan ke login (atau landing page kalau kamu punya)
+    return redirect()->route('login');
 });
 Route::get('/dashboard-pasien', function () {
     return view('pages.pasien.dashboard');
@@ -17,6 +19,33 @@ Route::get('/pendaftaran', function () {
 Route::get('/antrian', function () {
     return view('pages.pasien.antrian'); 
 });
-Route::get('/pasien/hasilPemeriksaan', function () {
+Route::get('/hasilPemeriksaan', function () {
     return view('pages.pasien.hasilPemeriksaan');
+});
+
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
+Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
+Route::post('/register', [AuthController::class, 'register'])->name('register.post');
+
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::middleware('requireApiLogin')->group(function () {
+
+    Route::get('/dashboard-pasien', function () {
+        return view('pages.pasien.dashboard');
+    })->name('dashboard.pasien');
+
+    Route::get('/dashboard-petugas', function () {
+        return view('pages.admin.dashboard');
+    })->name('dashboard.petugas');
+
+    Route::get('/pendaftaran', function () {
+        return view('pages.pasien.pendaftaran');
+    })->name('pendaftaran');
+
+    Route::get('/antrian', function () {
+        return view('pages.pasien.antrian');
+    })->name('antrian');
 });

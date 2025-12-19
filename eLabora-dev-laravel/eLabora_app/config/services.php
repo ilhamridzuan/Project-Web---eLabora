@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'express_api' => [
+        'url' => env('EXPRESS_API_URL', 'http://localhost:3000'),
+    ],
+
 ];
