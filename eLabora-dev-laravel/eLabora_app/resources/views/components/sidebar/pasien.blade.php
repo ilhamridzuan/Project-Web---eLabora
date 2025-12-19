@@ -2,7 +2,7 @@
     $items = [
         ['label' => 'Beranda', 'url' => url('/dashboard-pasien')],
         ['label' => 'Pendaftaran', 'url' => url('/pendaftaran')],
-        ['label' => 'Cek Hasil Pemeriksaan', 'url' => url('/hasil-pemeriksaan')],
+        ['label' => 'Cek Hasil Pemeriksaan', 'url' => url('/hasilPemeriksaan')],
         ['label' => 'Riwayat Pemeriksaan', 'url' => url('/riwayat')],
     ];
 
