@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('layouts.app');
 });
-Route::get('/dashboard', function () {
+Route::get('/dashboard-pasien', function () {
     return view('pages.pasien.dashboard');
 });
 Route::get('/dashboard-petugas', function () {
