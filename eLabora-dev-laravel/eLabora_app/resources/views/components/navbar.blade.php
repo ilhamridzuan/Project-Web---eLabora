@@ -23,14 +23,14 @@
             class="w-10 h-10 rounded-full border-2 border-indigo-600 object-cover" />
 
         {{-- Logout --}}
-        {{-- form method="POST" action="{{ route('logout') }}"> --}}
-        @csrf
-        <button
-            type="submit"
-            class="px-3 py-1.5 text-sm rounded-md bg-indigo-600 text-white
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button
+                type="submit"
+                class="px-3 py-1.5 text-sm rounded-md bg-indigo-600 text-white
                        hover:bg-indigo-700 transition">
-            Logout
-        </button>
-        {{-- /form> --}}
+                Logout
+            </button>
+        </form>
     </div>
 </header>
