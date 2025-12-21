@@ -3,7 +3,9 @@ import { QueueRepository } from "./queue.repository.js";
 import { AuditRepository } from "../audit/audit.repository.js";
 
 function todayISO() {
-  return new Date().toISOString().slice(0, 10);
+  // Return current date in Asia/Jakarta (WIB) in YYYY-MM-DD format
+  // Using en-CA locale produces ISO-like date strings (YYYY-MM-DD)
+  return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
 }
 
 export const QueueService = {
@@ -122,4 +124,16 @@ export const QueueService = {
       conn.release();
     }
   },
+
+  async queueStats() {
+      const conn = await db.getConnection();
+      try {  
+          const today = todayISO();
+          const stats = await QueueRepository.getQueueStats(conn, today);
+
+          return { stats, tanggal: today };
+      } finally {
+        conn.release();
+      }
+    },
 };

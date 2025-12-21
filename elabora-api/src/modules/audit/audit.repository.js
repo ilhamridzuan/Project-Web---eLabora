@@ -15,4 +15,32 @@ export const AuditRepository = {
       ]
     );
   },
+
+  async list(conn, { entity, limit = 20, offset = 0 }) {
+    let whereClause = '';
+    const bindings = [];
+
+    if (entity) {
+      whereClause = 'WHERE a.entity = ?';
+      bindings.push(entity);
+    }
+
+    const [rows] = await conn.query(
+      `
+      SELECT
+        a.entity,
+        a.changed_at,
+        a.detail,
+        ak.username AS changed_by
+      FROM audit_log a
+      LEFT JOIN akun ak ON ak.id = a.changed_by_akun_id
+      ${whereClause}
+      ORDER BY a.changed_at DESC
+      LIMIT ? OFFSET ?
+      `,
+      [...bindings, Number(limit), Number(offset)]
+    );
+
+    return rows;
+  },
 };

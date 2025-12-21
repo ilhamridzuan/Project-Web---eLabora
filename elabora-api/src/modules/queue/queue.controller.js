@@ -40,3 +40,12 @@ export async function cancelQueue(req, res, next) {
     next(e);
   }
 }
+
+export async function queueStats(req, res, next) {
+  try {
+    const result = await QueueService.queueStats();
+    return res.json(result);
+  } catch (e) {
+    next(e);
+  }
+}

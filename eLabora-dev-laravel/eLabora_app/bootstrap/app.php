@@ -4,6 +4,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use App\Http\Middleware\RequireApiLogin;
+use App\Http\Middleware\RequireRole;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -14,7 +15,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         //
         $middleware->alias([
-            'requireApiLogin' => RequireApiLogin::class,
+            'requireAuth' => RequireApiLogin::class,
+            'requireRole' => RequireRole::class
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

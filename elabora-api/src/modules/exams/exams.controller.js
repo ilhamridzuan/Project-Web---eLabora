@@ -44,7 +44,7 @@ export async function patchExam(req, res, next) {
       if (Object.prototype.hasOwnProperty.call(patch, k)) clean[k] = patch[k];
     }
 
-    const updated = await ExamsService.update(id, clean);
+    const updated = await ExamsService.update(id, clean, req.user.akun_id);
     return res.json(updated);
   } catch (e) {
     next(e);
@@ -55,7 +55,7 @@ export async function uploadExamFile(req, res, next) {
   try {
     const id = Number(req.params.id);
     if (!req.file) return res.status(422).json({ message: "File required" });
-    const files = await ExamsService.attachFile({ pemeriksaanId: id, file: req.file });
+    const files = await ExamsService.attachFile({ pemeriksaanId: id, file: req.file, akunId: req.user.akun_id });
     return res.json({ files });
   } catch (e) {
     next(e);

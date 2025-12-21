@@ -2,29 +2,14 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardPetugasController;
+use App\Http\Controllers\AntrianController;
 
 Route::get('/', function () {
-    // arahkan ke login (atau landing page kalau kamu punya)
     return redirect()->route('login');
 });
-Route::get('/dashboard-pasien', function () {
-    return view('pages.pasien.dashboard');
-});
-Route::get('/dashboard-petugas', function () {
-    return view('pages.admin.dashboard');
-});
-Route::get('/pendaftaran', function () {
-    return view('pages.pasien.pendaftaran');
-});
-Route::get('/antrian', function () {
-    return view('pages.pasien.antrian'); 
-});
-Route::get('/hasilPemeriksaan', function () {
-    return view('pages.pasien.hasilPemeriksaan');
-});
-Route::get('/riwayat', function () {
-    return view('pages.pasien.riwayat');
-});
+
+// AUTH
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 
@@ -33,19 +18,11 @@ Route::post('/register', [AuthController::class, 'register'])->name('register.po
 
 Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-Route::middleware('requireApiLogin')->group(function () {
-
+// PASIEN (wajib login + role pasien)
+Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
     Route::get('/dashboard-pasien', function () {
         return view('pages.pasien.dashboard');
     })->name('dashboard.pasien');
-
-    Route::get('/dashboard-petugas', function () {
-        return view('pages.admin.dashboard');
-    })->name('dashboard.petugas');
-
-    Route::get('/dashboard-dokter', function () {
-        return view('pages.dokter.dashboard');
-    })->name('dashboard.dokter');
 
     Route::get('/pendaftaran', function () {
         return view('pages.pasien.pendaftaran');
@@ -54,4 +31,28 @@ Route::middleware('requireApiLogin')->group(function () {
     Route::get('/antrian', function () {
         return view('pages.pasien.antrian');
     })->name('antrian');
+
+    Route::get('/hasil-pemeriksaan', function () {
+        return view('pages.pasien.hasilPemeriksaan');
+    })->name('hasil.pemeriksaan');
+
+    Route::get('/riwayat', function () {
+        return view('pages.pasien.riwayat');
+    })->name('riwayat');
+});
+
+// PETUGAS
+Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
+    Route::get('/dashboard-petugas', [DashboardPetugasController::class, 'index'])
+        ->name('dashboard.petugas');
+    Route::get('/antrian', [AntrianController::class, 'index'])->name('antrian.petugas');
+    Route::post('/antrian/{id}/call', [AntrianController::class, 'call'])->name('antrian.call');
+    Route::post('/antrian/{id}/next', [AntrianController::class, 'next'])->name('antrian.next');
+    Route::post('/antrian/{id}/cancel', [AntrianController::class, 'cancel'])->name('antrian.cancel');
+});
+// DOKTER
+Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {
+    Route::get('/dashboard-dokter', function () {
+        return view('pages.dokter.dashboard');
+    })->name('dashboard.dokter');
 });

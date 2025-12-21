@@ -52,4 +52,48 @@ class ExpressApiService
 
         return $response;
     }
+
+    public function queueStats(): Response
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get("{$this->baseUrl}/queue/stats");
+
+        return $response;
+    }
+
+    public function auditLogs(array $params = []): Response
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get("{$this->baseUrl}/audit-logs", $params);
+
+        return $response;
+    }
+
+    public function queueToday()
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get("{$this->baseUrl}/queue/today");
+        return $response;
+    }
+
+    public function queueCall(int $id)
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->post("{$this->baseUrl}/queue/{$id}/call");
+        return $response;
+    }
+
+    public function queueNext(int $id)
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->post("{$this->baseUrl}/queue/{$id}/next");
+        return $response;
+    }
+
+    public function queueCancel(int $id)
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->post("{$this->baseUrl}/queue/{$id}/cancel");
+        return $response;
+    }
 }
