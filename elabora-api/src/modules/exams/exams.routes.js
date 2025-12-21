@@ -18,12 +18,13 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-// Dokter & Petugas: lihat riwayat pasien
-router.get("/patients/:pasienId", requireAuth, requireRole("DOKTER", "PETUGAS"), listByPatient);
+// lihat list pemeriksaan pasien
+router.get("/patients/:pasienId", requireAuth, listByPatient);
+// detail pemeriksaan
+router.get("/:id", requireAuth, getDetail); 
 
 // Petugas: CRUD hasil
 router.post("/", requireAuth, requireRole("PETUGAS"), createExam);
-router.get("/:id", requireAuth, requireRole("DOKTER", "PETUGAS"), getDetail);
 router.patch("/:id", requireAuth, requireRole("PETUGAS"), patchExam);
 router.post("/:id/files", requireAuth, requireRole("PETUGAS"), upload.single("file"), uploadExamFile);
 

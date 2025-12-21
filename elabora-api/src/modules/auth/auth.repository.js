@@ -26,7 +26,7 @@ export const AuthRepository = {
 
   async insertPasien(conn, data) {
     await conn.query(
-      `INSERT INTO pasien (akun_id, nik, nama, tgl_lahir, alamat, no_telepon, created_at, updated_at)
+      `INSERT INTO pasien (akun_id, nik, nama, tgl_lahir, jenis_kelamin, alamat, no_telepon, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())`,
       [
         data.akun_id,
