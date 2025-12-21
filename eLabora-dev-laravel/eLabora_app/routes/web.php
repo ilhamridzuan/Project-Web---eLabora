@@ -41,6 +41,10 @@ Route::middleware('requireApiLogin')->group(function () {
         return view('pages.admin.dashboard');
     })->name('dashboard.petugas');
 
+    Route::get('/dashboard-dokter', function () {
+        return view('pages.dokter.dashboard');
+    })->name('dashboard.dokter');
+
     Route::get('/pendaftaran', function () {
         return view('pages.pasien.pendaftaran');
     })->name('pendaftaran');
