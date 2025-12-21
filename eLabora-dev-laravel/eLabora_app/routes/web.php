@@ -22,7 +22,9 @@ Route::get('/antrian', function () {
 Route::get('/hasilPemeriksaan', function () {
     return view('pages.pasien.hasilPemeriksaan');
 });
-
+Route::get('/riwayat', function () {
+    return view('pages.pasien.riwayat');
+});
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 

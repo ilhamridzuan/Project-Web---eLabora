@@ -1,14 +1,17 @@
-export function notFound(req, res) {
-  res.status(404).json({ message: "Route not found" });
-}
+// src/middleware/error.middleware.js
 
-export function errorHandler(err, req, res, next) {
-  console.error(err);
+export const notFound = (req, res, next) => {
+  res.status(404);
+  const error = new Error(`Route not found: ${req.method} ${req.originalUrl}`);
+  next(error);
+};
 
-  // duplikat unique key MySQL (username/email/nik)
-  if (String(err?.code) === "ER_DUP_ENTRY") {
-    return res.status(409).json({ message: "Data sudah digunakan (duplicate)." });
-  }
+export const errorHandler = (err, req, res, next) => {
+  const statusCode = res.statusCode && res.statusCode !== 200 ? res.statusCode : 500;
 
-  res.status(500).json({ message: "Internal server error" });
-}
+  res.status(statusCode).json({
+    message: err.message,
+    // tampilkan stack hanya saat dev
+    stack: process.env.NODE_ENV === "production" ? undefined : err.stack,
+  });
+};

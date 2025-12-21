@@ -6,11 +6,12 @@ import fs from "fs";
 import path from "path";
 
 import authRoutes from "./modules/auth/auth.routes.js";
-import { notFound, errorHandler } from "./middleware/error.middleware.js";
 import registrationRoutes from "./modules/registrations/registration.routes.js";
 import patientsRoutes from "./modules/patients/patients.routes.js";
 import queueRoutes from "./modules/queue/queue.routes.js";
 import examsRoutes from "./modules/exams/exams.routes.js";
+
+import { notFound, errorHandler } from "./middleware/error.middleware.js";
 
 const app = express();
 
@@ -23,10 +24,13 @@ const uploadBase = path.join(process.cwd(), "uploads");
 fs.mkdirSync(uploadBase, { recursive: true });
 fs.mkdirSync(path.join(uploadBase, "exams"), { recursive: true });
 fs.mkdirSync(path.join(uploadBase, "referrals"), { recursive: true });
+
 app.use("/uploads", express.static(uploadBase));
+
 app.get("/", (req, res) => {
   res.json({ message: "eLabora API is running" });
 });
+
 app.use("/auth", authRoutes);
 app.use("/registrations", registrationRoutes);
 app.use("/patients", patientsRoutes);
