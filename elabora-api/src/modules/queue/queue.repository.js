@@ -43,4 +43,19 @@ export const QueueRepository = {
     );
     return rows[0] || null;
   },
+
+  async getQueueStats(conn, today) {
+    const [rows] = await conn.query(
+      `SELECT
+        COUNT(*) AS total,
+        SUM(status='MENUNGGU') AS menunggu,
+        SUM(status='DILAYANI') AS dilayani,
+        SUM(status='SELESAI') AS selesai,
+        SUM(status='DIBATALKAN') AS dibatalkan
+       FROM pendaftaran
+       WHERE tanggal_antrian=?`,
+      [today]
+    );
+    return rows[0] || null;
+  },
 };

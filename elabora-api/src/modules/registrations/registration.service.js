@@ -75,7 +75,7 @@ export const RegistrationService = {
       const pasien = await RegistrationRepository.findPasienByAkunId(conn, akun_id);
       if (!pasien) return { my: null, stats: null };
 
-      const today = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+      const today = todayISO(); // YYYY-MM-DD
       const my = await RegistrationRepository.findMyQueueToday(conn, pasien.id, today);
       const stats = await RegistrationRepository.getQueueStats(conn, today);
 

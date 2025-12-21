@@ -1,6 +1,7 @@
 import path from "path";
 import { db } from "../../config/db.js";
 import { ExamsRepository } from "./exams.repository.js";
+import { AuditRepository } from "../audit/audit.repository.js";
 
 export const ExamsService = {
     async listByPatient(pasienId) {
@@ -39,23 +40,38 @@ export const ExamsService = {
             }
             const petugasLabId = petugasLab.id;
             const id = await ExamsRepository.create(conn, { ...payload, petugas_lab_id: petugasLabId });
+            await AuditRepository.insert(conn, {
+                entity: "pemeriksaan",
+                entity_id: id,
+                aksi: "CREATE",
+                changed_by_akun_id: akunId,
+                detail: "Pemeriksaan created",
+            });
+
             return await ExamsRepository.getDetail(conn, id);
         } finally {
             conn.release();
         }
     },
 
-    async update(pemeriksaanId, patch) {
+    async update(pemeriksaanId, patch, akunId) {
         const conn = await db.getConnection();
         try {
             await ExamsRepository.update(conn, pemeriksaanId, patch);
+            await AuditRepository.insert(conn, {
+                entity: "pemeriksaan",
+                entity_id: pemeriksaanId,
+                aksi: "UPDATE",
+                changed_by_akun_id: akunId,
+                detail: "Pemeriksaan updated",
+            });
             return await ExamsRepository.getDetail(conn, pemeriksaanId);
         } finally {
             conn.release();
         }
     },
 
-    async attachFile({ pemeriksaanId, file }) {
+    async attachFile({ pemeriksaanId, file, akunId }) {
         const allowed = ["application/pdf", "image/jpeg", "image/png"];
         if (!allowed.includes(file.mimetype)) {
             const err = new Error("File type not allowed");
@@ -73,6 +89,15 @@ export const ExamsService = {
                 file_path: relative,
                 mime_type: file.mimetype,
             });
+
+            await AuditRepository.insert(conn, {
+                entity: "pemeriksaan",
+                entity_id: pemeriksaanId,
+                aksi: "UPDATE",
+                changed_by_akun_id: akunId,
+                detail: "File attached to pemeriksaan",
+            });
+            
             return await ExamsRepository.listFiles(conn, pemeriksaanId);
         } finally {
             conn.release();
