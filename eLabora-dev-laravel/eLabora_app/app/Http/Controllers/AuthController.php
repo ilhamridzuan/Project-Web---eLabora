@@ -41,8 +41,8 @@ class AuthController extends Controller
 
         $map = [
             'PASIEN'  => '/dashboard-pasien',
-            'PETUGAS' => '/dashboard-petugas',
-            'ADMIN'   => '/dashboard-petugas', // kalau kamu anggap admin = petugas (sesuaikan)
+            'DOKTER' => '/dashboard-dokter',
+            'PETUGAS'   => '/dashboard-petugas', // kalau kamu anggap admin = petugas (sesuaikan)
         ];
 
         $routeName = $map[$role] ?? 'login';
