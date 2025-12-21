@@ -20,3 +20,6 @@ Route::get('/antrian', function () {
 Route::get('/pasien/hasilPemeriksaan', function () {
     return view('pages.pasien.hasilPemeriksaan');
 });
+Route::get('/riwayat', function () {
+    return view('pages.pasien.riwayat');
+});
