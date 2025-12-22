@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardPetugasController;
 use App\Http\Controllers\AntrianController;
+use App\Http\Controllers\PemeriksaanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -49,6 +50,8 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
     Route::post('/antrian/{id}/call', [AntrianController::class, 'call'])->name('antrian.call');
     Route::post('/antrian/{id}/next', [AntrianController::class, 'next'])->name('antrian.next');
     Route::post('/antrian/{id}/cancel', [AntrianController::class, 'cancel'])->name('antrian.cancel');
+    Route::get('/pemeriksaan', [PemeriksaanController::class, 'index'])
+        ->name('pemeriksaan.petugas');
 });
 // DOKTER
 Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {

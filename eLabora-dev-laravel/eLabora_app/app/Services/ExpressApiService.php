@@ -96,4 +96,11 @@ class ExpressApiService
         $response = $this->client(true)->post("{$this->baseUrl}/queue/{$id}/cancel");
         return $response;
     }
+
+    public function examsList(array $params = [])
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get("{$this->baseUrl}/exams/all", $params);
+        return $response;
+    }
 }

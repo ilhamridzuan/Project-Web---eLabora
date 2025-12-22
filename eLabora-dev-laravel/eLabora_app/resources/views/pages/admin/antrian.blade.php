@@ -40,8 +40,7 @@
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
                 <thead class="bg-slate-50 border-b border-slate-200">
-                    <tr class="text-left">
-                        <th class="px-4 py-3 font-semibold text-slate-700 w-16">No</th>
+                    <tr class="text-center">
                         <th class="px-4 py-3 font-semibold text-slate-700">No Antrian</th>
                         <th class="px-4 py-3 font-semibold text-slate-700">No Lab</th>
                         <th class="px-4 py-3 font-semibold text-slate-700">Pasien</th>
@@ -66,8 +65,7 @@
                             $isFinal = in_array($status, ['SELESAI', 'DIBATALKAN'], true);
                         @endphp
 
-                        <tr class="hover:bg-slate-50/60">
-                            <td class="px-4 py-3 text-slate-600">{{ $i + 1 }}</td>
+                        <tr class="hover:bg-slate-50/60 text-center">
                             <td class="px-4 py-3 text-slate-800 font-semibold tabular-nums">{{ $q['no_antrian'] ?? '-' }}</td>
                             <td class="px-4 py-3 text-slate-700">{{ $q['no_lab'] ?? '-' }}</td>
                             <td class="px-4 py-3">
