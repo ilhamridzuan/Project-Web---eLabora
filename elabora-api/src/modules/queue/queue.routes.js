@@ -4,9 +4,9 @@ import { listToday, callQueue, nextQueue, cancelQueue, queueStats } from "./queu
 
 const router = express.Router();
 
+router.get("/today", requireAuth, listToday);
+router.get("/stats", requireAuth, queueStats);
 // Petugas only (Manajemen Antrian)
-router.get("/today", requireAuth, requireRole("PETUGAS"), listToday);
-router.get("/stats", requireAuth, requireRole("PETUGAS"), queueStats);
 router.post("/:id/call", requireAuth, requireRole("PETUGAS"), callQueue);
 router.post("/:id/next", requireAuth, requireRole("PETUGAS"), nextQueue);
 router.post("/:id/cancel", requireAuth, requireRole("PETUGAS"), cancelQueue);
