@@ -134,14 +134,14 @@
 
         <div class="rounded-xl bg-white shadow-sm border border-slate-200 overflow-hidden">
             <div class="overflow-x-auto">
-                <table class="min-w-full text-sm">
+                <table class="min-w-full text-sm text-center">
                     <thead class="bg-slate-50 border-b border-slate-200">
-                        <tr class="text-left">
+                        <tr>
                             <th class="px-4 py-3 font-semibold text-slate-700 w-16">No</th>
                             <th class="px-4 py-3 font-semibold text-slate-700">Entity</th>
                             <th class="px-4 py-3 font-semibold text-slate-700">Changed By</th>
                             <th class="px-4 py-3 font-semibold text-slate-700">Changed At</th>
-                            <th class="px-4 py-3 font-semibold text-slate-700">Keterangan</th>
+                            <th class="px-4 py-3 font-semibold text-slate-700 text-left">Keterangan</th>
                         </tr>
                     </thead>
 
@@ -174,7 +174,7 @@
                             <td class="px-4 py-3 text-slate-600 tabular-nums">
                                 {{ $changedAt }}
                             </td>
-                            <td class="px-4 py-3 text-slate-600">
+                            <td class="px-4 py-3 text-slate-600 text-left">
                                 {{ $detail }}
                             </td>
                         </tr>
@@ -222,6 +222,12 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="flex items-center gap-2">
+            <a href="{{ route('dashboard.petugas') }}"
+                class="inline-flex items-center rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-700 hover:bg-slate-50">
+                Refresh
+            </a>
         </div>
     </section>
 

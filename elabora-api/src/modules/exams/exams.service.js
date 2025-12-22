@@ -97,10 +97,42 @@ export const ExamsService = {
                 changed_by_akun_id: akunId,
                 detail: "File attached to pemeriksaan",
             });
-            
+
             return await ExamsRepository.listFiles(conn, pemeriksaanId);
         } finally {
             conn.release();
         }
     },
-};
+
+    async listAll({ q, status_hasil, page, limit }) {
+        const safeLimit = Math.min(Math.max(Number(limit) || 20, 1), 100);
+        const safePage = Math.max(Number(page) || 1, 1);
+        const offset = (safePage - 1) * safeLimit;
+
+        const conn = await db.getConnection();
+        try {
+            const rows = await ExamsRepository.listAll(conn, {
+                q,
+                status_hasil,
+                limit: safeLimit,
+                offset,
+            });
+
+            const hasNext = rows.length > safeLimit;
+            const data = hasNext ? rows.slice(0, safeLimit) : rows;
+
+            return {
+                data,
+                meta: {
+                    page: safePage,
+                    limit: safeLimit,
+                    hasNext,
+                    hasPrev: safePage > 1,
+                },
+            };
+        } finally {
+            conn.release();
+        }
+    }
+}
+

@@ -22,7 +22,7 @@ export async function getDetail(req, res, next) {
 
 export async function createExam(req, res, next) {
   try {
-    
+
     const akunId = req.user.akun_id;
     const payload = req.body || {};
     const created = await ExamsService.create({ payload, akunId: akunId });
@@ -59,5 +59,23 @@ export async function uploadExamFile(req, res, next) {
     return res.json({ files });
   } catch (e) {
     next(e);
+  }
+}
+
+
+export async function  listAll(req, res, next) {
+  try {
+    const { q, status_hasil, page, limit } = req.query;
+
+    const result = await ExamsService.listAll({
+      q,
+      status_hasil,
+      page,
+      limit,
+    });
+
+    return res.json(result);
+  } catch (err) {
+    next(err);
   }
 }

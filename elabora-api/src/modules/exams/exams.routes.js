@@ -2,7 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import { requireAuth, requireRole } from "../../middleware/auth.middleware.js";
-import { createExam, getDetail, patchExam, uploadExamFile, listByPatient } from "./exams.controller.js";
+import { createExam, getDetail, patchExam, uploadExamFile, listByPatient, listAll } from "./exams.controller.js";
 
 const router = express.Router();
 
@@ -18,6 +18,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+router.get("/all", requireAuth, requireRole("PETUGAS", "DOKTER") , listAll);
 // lihat list pemeriksaan pasien
 router.get("/patients/:pasienId", requireAuth, listByPatient);
 // detail pemeriksaan

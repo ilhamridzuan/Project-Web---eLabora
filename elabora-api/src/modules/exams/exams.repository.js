@@ -24,12 +24,12 @@ export const ExamsRepository = {
   },
 
   async findPetugasLabIdByAkunId(conn, akunId) {
-  const [rows] = await conn.query(
-    `SELECT id FROM petugas_lab WHERE akun_id = ? LIMIT 1`,
-    [akunId]
-  );
-  return rows[0] || null;
-},
+    const [rows] = await conn.query(
+      `SELECT id FROM petugas_lab WHERE akun_id = ? LIMIT 1`,
+      [akunId]
+    );
+    return rows[0] || null;
+  },
 
   async getDetail(conn, pemeriksaanId) {
     const [rows] = await conn.query(
@@ -98,6 +98,77 @@ export const ExamsRepository = {
        ORDER BY id DESC`,
       [pemeriksaanId]
     );
+    return rows;
+  },
+
+  async listAll(conn, { q, status_hasil, limit, offset }) {
+    const bindings = [];
+    const where = [];
+
+    // Filter status_hasil
+    if (status_hasil) {
+      where.push(`pe.status_hasil = ?`);
+      bindings.push(status_hasil);
+    }
+
+    /**
+     * Search q:
+     * - angka -> pasien_id / pendaftaran_id / pemeriksaan_id
+     * - teks  -> nik / nama pasien
+     */
+    if (q) {
+      const qStr = String(q).trim();
+      const isNumeric = /^[0-9]+$/.test(qStr);
+
+      if (isNumeric) {
+        where.push(`(
+          p.pasien_id = ? OR
+          p.id = ? OR
+          pe.id = ?
+        )`);
+        bindings.push(Number(qStr), Number(qStr), Number(qStr));
+      } else {
+        where.push(`(
+          ps.nik LIKE ? OR
+          ps.nama LIKE ?
+        )`);
+        bindings.push(`%${qStr}%`, `%${qStr}%`);
+      }
+    }
+
+    const whereClause = where.length ? `WHERE ${where.join(' AND ')}` : '';
+
+    // limit + 1 untuk cek hasNext
+    const limitPlus = Number(limit) + 1;
+
+    const [rows] = await conn.query(
+      `
+      SELECT
+        pe.id AS pemeriksaan_id,
+        pe.tgl_pemeriksaan,
+        pe.status_validasi,
+        pe.status_hasil,
+        pe.catatan,
+
+        k.id AS kategori_id,
+        k.nama AS kategori_nama,
+
+        p.id AS pendaftaran_id,
+        p.pasien_id,
+
+        ps.nik,
+        ps.nama AS pasien_nama
+      FROM pendaftaran p
+      JOIN pemeriksaan pe ON pe.pendaftaran_id = p.id
+      JOIN kategori k ON k.id = pe.kategori_id
+      JOIN pasien ps ON ps.id = p.pasien_id
+      ${whereClause}
+      ORDER BY pe.tgl_pemeriksaan DESC, pe.id DESC
+      LIMIT ? OFFSET ?
+      `,
+      [...bindings, limitPlus, Number(offset)]
+    );
+
     return rows;
   },
 };
