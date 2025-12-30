@@ -5,6 +5,7 @@ namespace App\Services;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Http\UploadedFile;
 
 class ExpressApiService
 {
@@ -101,6 +102,30 @@ class ExpressApiService
     {
         /** @var Response $response */
         $response = $this->client(true)->get("{$this->baseUrl}/exams/all", $params);
+        return $response;
+    }
+
+    public function authMe(): Response
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get("{$this->baseUrl}/auth/me");
+        return $response;
+    }
+
+    // =========================
+    // Registration (Pendaftaran)
+    // =========================
+    public function registrationCreate(array $payload, UploadedFile $suratRujukan): Response
+    {
+        /** @var Response $response */
+        $response = $this->client(true)
+            ->attach(
+                'surat_rujukan', // harus sama persis dengan upload.single("surat_rujukan") di API
+                file_get_contents($suratRujukan->getRealPath()),
+                $suratRujukan->getClientOriginalName()
+            )
+            ->post("{$this->baseUrl}/registrations", $payload);
+
         return $response;
     }
 }

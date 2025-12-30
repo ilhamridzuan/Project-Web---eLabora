@@ -5,6 +5,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardPetugasController;
 use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\PemeriksaanController;
+use App\Http\Controllers\PendaftaranController;
+use App\Http\Controllers\AntrianPasienController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -25,13 +27,10 @@ Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
         return view('pages.pasien.dashboard');
     })->name('dashboard.pasien');
 
-    Route::get('/pendaftaran', function () {
-        return view('pages.pasien.pendaftaran');
-    })->name('pendaftaran');
+    Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pasien.pendaftaran.index');
+    Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pasien.pendaftaran.store');
 
-    Route::get('/antrian', function () {
-        return view('pages.pasien.antrian');
-    })->name('antrian');
+    Route::get('/antrian-pasien', [AntrianPasienController::class, 'index'])->name('antrian.pasien');
 
     Route::get('/hasil-pemeriksaan', function () {
         return view('pages.pasien.hasilPemeriksaan');
