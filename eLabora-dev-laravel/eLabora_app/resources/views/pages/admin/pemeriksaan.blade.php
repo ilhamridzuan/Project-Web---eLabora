@@ -11,15 +11,14 @@
         openUpload: false,
         selectedExam: null
     }"
-    class="space-y-6"
->
+    class="space-y-6">
 
     {{-- ================= HEADER ================= --}}
-    <div>
-        <h2 class="text-2xl font-semibold text-slate-800">Manajemen Pemeriksaan</h2>
-        <p class="text-sm text-slate-500 mt-1">
-            Daftar seluruh pemeriksaan terbaru
-        </p>
+    <div class="flex items-start justify-between">
+        <div>
+            <h2 class="text-2xl font-semibold text-slate-800">Manajemen Pemeriksaan</h2>
+            <p class="text-sm text-slate-500 mt-1">Kelola data pemeriksaan, pembaruan status, dan upload file.</p>
+        </div>
     </div>
 
     {{-- ================= FLASH MESSAGE ================= --}}
@@ -39,7 +38,8 @@
     <div class="flex justify-end">
         <button
             @click="openCreate = true"
-            class="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-semibold hover:bg-indigo-700">
+            class="rounded-lg bg-indigo-600 text-white px-4 py-2 text-sm font-semibold hover:bg-indigo-700 transition"
+        >
             + Buat Pemeriksaan
         </button>
     </div>
@@ -47,68 +47,74 @@
     {{-- ================= TABLE ================= --}}
     <div class="rounded-xl bg-white shadow-sm border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
+            <table class="min-w-full text-sm text-center">
                 <thead class="bg-slate-50 border-b border-slate-200">
-                    <tr class="text-left">
-                        <th class="px-4 py-3 w-16">No</th>
-                        <th class="px-4 py-3">Tanggal</th>
-                        <th class="px-4 py-3">Pasien</th>
-                        <th class="px-4 py-3">Kategori</th>
-                        <th class="px-4 py-3">Status Hasil</th>
-                        <th class="px-4 py-3 w-40">Aksi</th>
+                    <tr>
+                        <th class="px-4 py-3 font-semibold text-slate-700">No</th>
+                        <th class="px-4 py-3 font-semibold text-slate-700 text-left">Kategori</th>
+                        <th class="px-4 py-3 font-semibold text-slate-700">Tgl Pemeriksaan</th>
+                        <th class="px-4 py-3 font-semibold text-slate-700">Status Validasi</th>
+                        <th class="px-4 py-3 font-semibold text-slate-700">Status Hasil</th>
+                        <th class="px-4 py-3 font-semibold text-slate-700 text-left">Catatan</th>
+                        <th class="px-4 py-3 font-semibold text-slate-700">Aksi</th>
                     </tr>
                 </thead>
 
                 <tbody class="divide-y divide-slate-100">
-                    @forelse($exams as $i => $exam)
-                        @php
-                            $status = strtoupper($exam['status_hasil'] ?? '-');
-                            $badge = 'bg-slate-100 text-slate-700 border-slate-200';
-
-                            if ($status === 'MENUNGGU') $badge = 'bg-amber-50 text-amber-700 border-amber-200';
-                            if ($status === 'PROSES')   $badge = 'bg-indigo-50 text-indigo-700 border-indigo-200';
-                            if ($status === 'SELESAI')  $badge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
-                        @endphp
-
+                    @forelse($exams ?? [] as $i => $exam)
                         <tr class="hover:bg-slate-50/60">
-                            <td class="px-4 py-3">
-                                {{ ($meta['page'] - 1) * 20 + $i + 1 }}
-                            </td>
+                            <td class="px-4 py-3 text-slate-600 tabular-nums">{{ $i + 1 }}</td>
 
-                            <td class="px-4 py-3">
-                                {{ $exam['tgl_pemeriksaan'] ?? '-' }}
-                            </td>
-
-                            <td class="px-4 py-3">
-                                <div class="font-medium text-slate-800">
-                                    {{ $exam['pasien_nama'] ?? '-' }}
-                                </div>
-                                <div class="text-xs text-slate-500">
-                                    {{ $exam['nik'] ?? '-' }}
-                                </div>
-                            </td>
-
-                            <td class="px-4 py-3">
+                            <td class="px-4 py-3 text-left font-medium text-slate-800">
                                 {{ $exam['kategori_nama'] ?? '-' }}
                             </td>
 
-                            <td class="px-4 py-3">
-                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg border text-xs font-semibold {{ $badge }}">
-                                    {{ $status }}
-                                </span>
+                            <td class="px-4 py-3 text-slate-700">
+                                {{ $exam['tgl_pemeriksaan'] ?? '-' }}
+                            </td>
+
+                            <td class="px-4 py-3 text-slate-700">
+                                {{ $exam['status_validasi'] ?? '-' }}
+                            </td>
+
+                            <td class="px-4 py-3 text-slate-700">
+                                {{ $exam['status_hasil'] ?? '-' }}
+                            </td>
+
+                            <td class="px-4 py-3 text-left text-slate-700">
+                                <div class="line-clamp-2">
+                                    {{ $exam['catatan'] ?? '-' }}
+                                </div>
                             </td>
 
                             <td class="px-4 py-3">
-                                <div class="flex gap-2">
+                                <div class="flex gap-2 justify-center">
                                     <button
                                         @click="openDetail = true; selectedExam = {{ json_encode($exam) }}"
-                                        class="px-2.5 py-1.5 rounded-lg text-xs border hover:bg-slate-50">
+                                        class="inline-flex items-center gap-1.5
+                                               rounded-lg
+                                               bg-indigo-600 px-3 py-1.5
+                                               text-xs font-semibold text-white
+                                               shadow-sm
+                                               hover:bg-indigo-700
+                                               focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                                               transition"
+                                    >
                                         Detail / Edit
                                     </button>
 
                                     <button
                                         @click="openUpload = true; selectedExam = {{ json_encode($exam) }}"
-                                        class="px-2.5 py-1.5 rounded-lg text-xs border hover:bg-slate-50">
+                                        class="inline-flex items-center gap-1.5
+                                               rounded-lg
+                                               border border-indigo-200 bg-white
+                                               px-3 py-1.5
+                                               text-xs font-semibold text-indigo-700
+                                               shadow-sm
+                                               hover:bg-indigo-50
+                                               focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2
+                                               transition"
+                                    >
                                         Upload
                                     </button>
                                 </div>
@@ -116,44 +122,14 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-4 py-10 text-center text-slate-500">
-                                Tidak ada data pemeriksaan
+                            <td colspan="7" class="px-4 py-10 text-slate-400">
+                                Tidak ada data pemeriksaan.
                             </td>
                         </tr>
                     @endforelse
                 </tbody>
+
             </table>
-        </div>
-
-        {{-- ================= PAGINATION ================= --}}
-        <div class="flex items-center justify-between px-4 py-3 border-t border-slate-200">
-            <span class="text-sm text-slate-500">
-                Halaman {{ $meta['page'] }}
-            </span>
-
-            <div class="flex gap-2">
-                @if($meta['hasPrev'])
-                    <a href="{{ request()->fullUrlWithQuery(['page' => $meta['page'] - 1]) }}"
-                       class="px-3 py-1.5 rounded-lg border hover:bg-slate-50 text-sm">
-                        ← Prev
-                    </a>
-                @else
-                    <span class="px-3 py-1.5 rounded-lg border text-slate-400 text-sm">
-                        ← Prev
-                    </span>
-                @endif
-
-                @if($meta['hasNext'])
-                    <a href="{{ request()->fullUrlWithQuery(['page' => $meta['page'] + 1]) }}"
-                       class="px-3 py-1.5 rounded-lg border hover:bg-slate-50 text-sm">
-                        Next →
-                    </a>
-                @else
-                    <span class="px-3 py-1.5 rounded-lg border text-slate-400 text-sm">
-                        Next →
-                    </span>
-                @endif
-            </div>
         </div>
     </div>
 
@@ -162,37 +138,56 @@
         <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
             <h3 class="text-lg font-semibold mb-4">Buat Pemeriksaan</h3>
 
+            {{-- ROUTE BENAR: POST /petugas/pemeriksaan --}}
             <form method="POST" action="{{ url('/petugas/pemeriksaan') }}" class="space-y-4">
                 @csrf
 
                 <div>
                     <label class="text-sm font-medium">Pendaftaran ID</label>
-                    <input name="pendaftaran_id" required
-                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm">
+                    <input
+                        type="number"
+                        name="pendaftaran_id"
+                        required
+                        value="{{ old('pendaftaran_id') }}"
+                        placeholder="Masukkan ID pendaftaran"
+                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm"
+                    >
                 </div>
 
                 <div>
                     <label class="text-sm font-medium">Kategori</label>
-                    <select name="kategori_id"
-                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm">
+                    <select
+                        name="kategori_id"
+                        required
+                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm"
+                    >
                         @foreach($kategoriList ?? [] as $kat)
-                            <option value="{{ $kat['id'] }}">{{ $kat['nama'] }}</option>
+                            <option value="{{ $kat['id'] }}" @selected(old('kategori_id') == $kat['id'])>
+                                {{ $kat['nama'] }}
+                            </option>
                         @endforeach
                     </select>
                 </div>
 
                 <div>
                     <label class="text-sm font-medium">Catatan</label>
-                    <textarea name="catatan" rows="3"
-                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm"></textarea>
+                    <textarea
+                        name="catatan"
+                        rows="3"
+                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm"
+                        placeholder="(Opsional)"
+                    >{{ old('catatan') }}</textarea>
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <button type="button" @click="openCreate=false"
-                        class="px-4 py-2 text-sm border rounded-lg">
+                    <button
+                        type="button"
+                        @click="openCreate=false"
+                        class="px-4 py-2 text-sm border rounded-lg"
+                    >
                         Batal
                     </button>
-                    <button class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg">
+                    <button class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         Simpan
                     </button>
                 </div>
@@ -205,17 +200,22 @@
         <div class="bg-white w-full max-w-lg rounded-xl shadow-lg p-6">
             <h3 class="text-lg font-semibold mb-4">Detail / Edit Pemeriksaan</h3>
 
+            {{-- ROUTE BENAR: PATCH /petugas/pemeriksaan/{id} --}}
             <form
                 method="POST"
-                :action="`/petugas/pemeriksaan/${selectedExam.pemeriksaan_id}`"
-                class="space-y-4">
+                :action="`{{ url('/petugas/pemeriksaan') }}/${selectedExam.pemeriksaan_id}`"
+                class="space-y-4"
+            >
                 @csrf
                 @method('PATCH')
 
                 <div>
                     <label class="text-sm font-medium">Status Hasil</label>
-                    <select name="status_hasil"
-                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm">
+                    <select
+                        name="status_hasil"
+                        x-model="selectedExam.status_hasil"
+                        class="w-full mt-1 rounded-lg border px-3 py-2 text-sm"
+                    >
                         <option value="MENUNGGU">MENUNGGU</option>
                         <option value="PROSES">PROSES</option>
                         <option value="SELESAI">SELESAI</option>
@@ -228,15 +228,19 @@
                         name="catatan"
                         rows="3"
                         class="w-full mt-1 rounded-lg border px-3 py-2 text-sm"
-                        x-text="selectedExam?.catatan ?? ''"></textarea>
+                        x-model="selectedExam.catatan"
+                    ></textarea>
                 </div>
 
                 <div class="flex justify-end gap-2">
-                    <button type="button" @click="openDetail=false"
-                        class="px-4 py-2 text-sm border rounded-lg">
+                    <button
+                        type="button"
+                        @click="openDetail=false"
+                        class="px-4 py-2 text-sm border rounded-lg"
+                    >
                         Tutup
                     </button>
-                    <button class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg">
+                    <button class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         Simpan
                     </button>
                 </div>
@@ -249,20 +253,31 @@
         <div class="bg-white w-full max-w-md rounded-xl shadow-lg p-6">
             <h3 class="text-lg font-semibold mb-4">Upload File Pemeriksaan</h3>
 
+            {{-- ROUTE BENAR: POST /petugas/pemeriksaan/{id}/file --}}
             <form
                 method="POST"
                 enctype="multipart/form-data"
-                :action="`/petugas/pemeriksaan/${selectedExam.pemeriksaan_id}/file`">
+                :action="`{{ url('/petugas/pemeriksaan') }}/${selectedExam.pemeriksaan_id}/file`"
+            >
                 @csrf
 
-                <input type="file" name="file" class="mb-4">
+                <input
+                    type="file"
+                    name="file"
+                    required
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    class="mb-4 w-full text-sm"
+                >
 
                 <div class="flex justify-end gap-2">
-                    <button type="button" @click="openUpload=false"
-                        class="px-4 py-2 text-sm border rounded-lg">
+                    <button
+                        type="button"
+                        @click="openUpload=false"
+                        class="px-4 py-2 text-sm border rounded-lg"
+                    >
                         Batal
                     </button>
-                    <button class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg">
+                    <button class="px-4 py-2 text-sm bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition">
                         Upload
                     </button>
                 </div>
