@@ -155,4 +155,29 @@ class ExpressApiService
         );
         return $response;   
     }
+
+    // LIST HASIL PEMERIKSAAN
+    public function listByPatient(int $pasienId): array
+    {
+        $response = $this->client()
+            ->get("{$this->baseUrl}/exams/patients/{$pasienId}");
+
+        if (!$response->successful()) {
+            throw new \Exception('Gagal mengambil hasil pemeriksaan');
+        }
+
+        return $response->json('data');
+    }
+
+    public function detail(int $id): array
+    {
+        $response = $this->client()
+            ->get("{$this->baseUrl}/exams/{$id}");
+
+        if (!$response->successful()) {
+            throw new \Exception('Detail pemeriksaan tidak ditemukan');
+        }
+
+        return $response->json();
+    }
 }
