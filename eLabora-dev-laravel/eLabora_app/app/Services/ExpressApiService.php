@@ -137,4 +137,22 @@ class ExpressApiService
     }
     
 
+    public function pasien(array $params = [])
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get(
+            "{$this->baseUrl}/patients",
+            $params
+        );
+        return $response;
+    }
+
+    public function pasienDetail(int $id)
+    {
+        /** @var Response $response */
+        $response = $this->client(true)->get(
+            "{$this->baseUrl}/patients/{$id}"
+        );
+        return $response;   
+    }
 }

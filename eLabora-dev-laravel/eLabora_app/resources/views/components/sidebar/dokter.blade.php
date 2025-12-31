@@ -1,7 +1,7 @@
 @php
 $items = [
 ['label' => 'Beranda', 'url' => url('/dashboard-dokter')],
-['label' => 'Pasien', 'url' => url('/data-pasien')],
+['label' => 'Pasien', 'url' => url('/pasien-dokter')],
 ];
 
 $currentUrl = url()->current();
