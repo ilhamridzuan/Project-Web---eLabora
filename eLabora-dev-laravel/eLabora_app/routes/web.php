@@ -10,8 +10,10 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AntrianPasienController;
 use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\DashboardDokterController;
-use App\Http\Controllers\PasienController;  
+use App\Http\Controllers\PasienController;
 use App\Http\Controllers\HasilPemeriksaanController;
+use App\Http\Controllers\PasienDashboardController;
+use App\Http\Controllers\ManajemenPasienController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -28,23 +30,20 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // PASIEN (wajib login + role pasien)
 Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
-    Route::get('/dashboard-pasien', function () {
-        return view('pages.pasien.dashboard');
-    })->name('dashboard.pasien');
+    Route::get('/dashboard-pasien', [PasienDashboardController::class, 'index'])->name('pasien.dashboard');
 
     Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pasien.pendaftaran.index');
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pasien.pendaftaran.store');
 
     Route::get('/antrian-pasien', [AntrianPasienController::class, 'index'])->name('antrian.pasien');
 
-    Route::get('/hasil-pemeriksaan',[HasilPemeriksaanController::class, 'index'])
+    Route::get('/hasil-pemeriksaan', [HasilPemeriksaanController::class, 'index'])
         ->name('hasil.pemeriksaan');
 
-    Route::get('/detail-pemeriksaan/{id}',[HasilPemeriksaanController::class, 'show'])
+    Route::get('/detail-pemeriksaan/{id}', [HasilPemeriksaanController::class, 'show'])
         ->name('detail.pemeriksaan');
 
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
-
 });
 
 // PETUGAS
@@ -57,9 +56,13 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
     Route::post('/antrian/{id}/cancel', [AntrianController::class, 'cancel'])->name('antrian.cancel');
     Route::get('/pemeriksaan', [PemeriksaanController::class, 'index'])
         ->name('pemeriksaan.petugas');
+    Route::post('/pemeriksaan', [PemeriksaanController::class, 'store']);
+    Route::patch('/pemeriksaan/{id}', [PemeriksaanController::class, 'update']);
+    Route::post('/pemeriksaan/{id}/file', [PemeriksaanController::class, 'uploadFile']);
+    Route::get('/pasien-petugas', [ManajemenPasienController::class, 'index'])->name('petugas.pasien');
 });
 // DOKTER
 Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {
-    Route::get('/dashboard-dokter',  [DashboardDokterController::class, 'index'] )->name('dashboard.dokter');
+    Route::get('/dashboard-dokter',  [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
     Route::get('/pasien-dokter', [PasienController::class, 'index'])->name('pasien.dokter');
 });

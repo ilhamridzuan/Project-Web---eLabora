@@ -135,7 +135,7 @@ class ExpressApiService
         $response = $this->client(true)->get("{$this->baseUrl}/exams/patients/{$pasienId}");
         return $response;
     }
-    
+
 
     public function pasien(array $params = [])
     {
@@ -153,12 +153,13 @@ class ExpressApiService
         $response = $this->client(true)->get(
             "{$this->baseUrl}/patients/{$id}"
         );
-        return $response;   
+        return $response;
     }
 
     // LIST HASIL PEMERIKSAAN
     public function listByPatient(int $pasienId): array
     {
+        /** @var \Illuminate\Http\Client\Response $response */
         $response = $this->client()
             ->get("{$this->baseUrl}/exams/patients/{$pasienId}");
 
@@ -171,6 +172,7 @@ class ExpressApiService
 
     public function detail(int $id): array
     {
+        /** @var \Illuminate\Http\Client\Response $response */
         $response = $this->client()
             ->get("{$this->baseUrl}/exams/{$id}");
 
@@ -179,5 +181,33 @@ class ExpressApiService
         }
 
         return $response->json();
+    }
+
+    public function createExam(array $payload): Response
+    {
+        /** @var \Illuminate\Http\Client\Response $response */
+        $response = $this->client(true)->post("/exams", $payload);
+        return $response;
+    }
+
+    public function patchExam(int $id, array $patch): Response
+    {
+        /** @var \Illuminate\Http\Client\Response $response */
+        $response = $this->client(true)->patch("/exams/{$id}", $patch);
+        return $response;
+    }
+
+    public function uploadExamFile(int $id, UploadedFile $file): Response
+    {
+        /** @var \Illuminate\Http\Client\Response $response */
+        $response = $this->client(true)
+            ->attach(
+                'file',
+                file_get_contents($file->getRealPath()),
+                $file->getClientOriginalName()
+            )
+            ->post("/exams/{$id}/files");
+
+        return $response;
     }
 }
