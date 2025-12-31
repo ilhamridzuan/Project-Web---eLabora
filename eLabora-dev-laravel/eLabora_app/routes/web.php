@@ -10,6 +10,7 @@ use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AntrianPasienController;
 use App\Http\Controllers\DashboardDokterController;
 use App\Http\Controllers\PasienController;  
+use App\Http\Controllers\HasilPemeriksaanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -35,9 +36,11 @@ Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
 
     Route::get('/antrian-pasien', [AntrianPasienController::class, 'index'])->name('antrian.pasien');
 
-    Route::get('/hasil-pemeriksaan', function () {
-        return view('pages.pasien.hasilPemeriksaan');
-    })->name('hasil.pemeriksaan');
+    Route::get('/hasil-pemeriksaan',[HasilPemeriksaanController::class, 'index'])
+        ->name('hasil.pemeriksaan');
+
+    Route::get('/detail-pemeriksaan/{id}',[HasilPemeriksaanController::class, 'show'])
+        ->name('detail.pemeriksaan');
 
     Route::get('/riwayat', function () {
         return view('pages.pasien.riwayat');
