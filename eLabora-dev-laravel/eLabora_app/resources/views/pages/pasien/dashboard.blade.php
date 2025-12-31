@@ -64,95 +64,142 @@
     </section>
 
     {{-- Queue Section --}}
-<section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-    {{-- Tabel Antrian --}}
-    <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
-        <h3 class="font-semibold text-slate-800 mb-4">
-            Daftar Antrian Laboratorium Hari Ini
-        </h3>
+        {{-- Tabel Antrian --}}
+        <div class="lg:col-span-2">
+            <div class="flex items-center justify-between mb-3">
+                <div>
+                    <h3 class="text-lg font-semibold text-slate-800">Daftar Antrian Laboratorium Hari Ini</h3>
+                    <p class="text-sm text-slate-500">Update otomatis sesuai data sistem.</p>
+                </div>
+            </div>
 
-        <table class="w-full text-sm text-center border-collapse">
-            <thead class="bg-indigo-50 text-indigo-700">
-                <tr>
-                    <th class="py-2">No. Antrian</th>
-                    <th>Jenis Pemeriksaan</th>
-                    <th>Status</th>
-                    <th>Waktu</th>
-                </tr>
-            </thead>
+            <div class="rounded-xl bg-white shadow-sm border border-slate-200 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full text-sm text-center">
+                        <thead class="bg-slate-50 border-b border-slate-200">
+                            <tr>
+                                <th class="px-4 py-3 font-semibold text-slate-700">No. Antrian</th>
+                                <th class="px-4 py-3 font-semibold text-slate-700">Jenis Pemeriksaan</th>
+                                <th class="px-4 py-3 font-semibold text-slate-700">Status</th>
+                                <th class="px-4 py-3 font-semibold text-slate-700">Waktu</th>
+                            </tr>
+                        </thead>
 
-            <tbody class="text-slate-600">
-                <tr class="border-b">
-                    <td class="py-2">A001</td>
-                    <td>Patologi</td>
-                    <td>
-                        <span class="px-3 py-1 rounded-full bg-indigo-600 text-white text-xs">
-                            Sedang Dilayani
+                        <tbody class="divide-y divide-slate-100">
+                            @forelse($queues ?? [] as $q)
+                            @php
+                            $status = strtoupper($q['status'] ?? '-');
+
+                            // badge warna (tetap seperti sebelumnya)
+                            $badge = 'bg-slate-100 text-slate-700 border-slate-200';
+                            if ($status === 'MENUNGGU' || $status === 'PENDING') $badge = 'bg-amber-50 text-amber-700 border-amber-200';
+                            elseif ($status === 'DILAYANI' || $status === 'PROSES') $badge = 'bg-indigo-50 text-indigo-700 border-indigo-200';
+                            elseif ($status === 'SELESAI' || $status === 'DONE') $badge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
+                            elseif ($status === 'DIBATALKAN' || $status === 'BATAL' || $status === 'CANCEL') $badge = 'bg-rose-50 text-rose-700 border-rose-200';
+
+                            // isi tetap (tidak mengubah struktur data kamu)
+                            $jenis = $q['kategori_nama'] ?? $q['kategori'] ?? $q['no_lab'] ?? '-';
+
+                            $waktu = '-';
+                            if (!empty($q['jadwal_pemeriksaan_at'])) {
+                            try {
+                            $waktu = \Carbon\Carbon::parse($q['jadwal_pemeriksaan_at'])->format('H:i');
+                            } catch (\Throwable $e) {}
+                            }
+                            @endphp
+
+                            <tr class="hover:bg-slate-50/60">
+                                <td class="px-4 py-3 text-slate-800 font-semibold tabular-nums">
+                                    {{ $q['no_antrian'] ?? '-' }}
+                                </td>
+                                <td class="px-4 py-3 text-slate-700">
+                                    {{ $jenis }}
+                                </td>
+                                <td class="px-4 py-3">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg border text-xs font-semibold {{ $badge }}">
+                                        {{ $status }}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-slate-600 tabular-nums">
+                                    {{ $waktu }}
+                                </td>
+                            </tr>
+                            @empty
+                            <tr>
+                                <td colspan="4" class="px-4 py-10 text-center">
+                                    <p class="text-sm font-semibold text-slate-700">Belum ada antrian hari ini</p>
+                                    <p class="text-xs text-slate-500 mt-1">Data antrian akan tampil ketika ada pendaftaran.</p>
+                                </td>
+                            </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+
+        {{-- Info Antrian Saat Ini --}}
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex flex-col">
+            <h3 class="font-semibold text-slate-800 text-center mb-5">
+                Informasi Antrian Saat Ini
+            </h3>
+
+            @if(!empty($current))
+            <div class="flex-1">
+                <div
+                    class="rounded-xl p-5 border border-indigo-100 bg-gradient-to-br from-indigo-50 to-white">
+
+                    <div class="flex items-start justify-between">
+                        <div>
+                            <p class="text-xs text-slate-500">No Antrian</p>
+                            <p class="mt-1 text-3xl font-semibold text-indigo-700 tracking-tight tabular-nums">
+                                {{ $current['no_antrian'] ?? '-' }}
+                            </p>
+                        </div>
+
+                        @php
+                        $stNow = strtoupper($current['status'] ?? 'DILAYANI');
+                        @endphp
+                        <span
+                            class="inline-flex items-center px-2.5 py-1 rounded-lg border text-xs font-semibold
+                               bg-indigo-50 text-indigo-700 border-indigo-200">
+                            {{ $stNow }}
                         </span>
-                    </td>
-                    <td>08:30</td>
-                </tr>
+                    </div>
 
-                <tr class="border-b">
-                    <td class="py-2">A002</td>
-                    <td>Anatomi</td>
-                    <td>
-                        <span class="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs">
-                            Menunggu
-                        </span>
-                    </td>
-                    <td>08:45</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                    <div class="mt-4 grid grid-cols-2 gap-4 text-sm">
+                        <div class="rounded-lg bg-white border border-slate-200 p-3">
+                            <p class="text-xs text-slate-500">No Lab</p>
+                            <p class="mt-1 font-medium text-slate-800">
+                                {{ $current['no_lab'] ?? '-' }}
+                            </p>
+                        </div>
 
-    {{-- Info Antrian Saat Ini --}}
-    <div class="bg-white rounded-2xl shadow-sm p-6 space-y-4">
-        <h3 class="font-semibold text-center text-slate-800">
-            Informasi Antrian Saat Ini
-        </h3>
+                        <div class="rounded-lg bg-white border border-slate-200 p-3 text-right">
+                            <p class="text-xs text-slate-500">Jadwal</p>
+                            <p class="mt-1 font-medium text-slate-800">
+                                @if(!empty($current['jadwal_pemeriksaan_at']))
+                                {{ \Carbon\Carbon::parse($current['jadwal_pemeriksaan_at'])->format('d M Y, H:i') }}
+                                @else
+                                -
+                                @endif
+                            </p>
 
-        {{-- Nomor Antrian Saat Ini --}}
-        <div class="text-center">
-            <p class="text-sm text-slate-500">Nomor Antrian</p>
-            <p class="text-3xl font-semibold text-indigo-600">A004</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @else
+            <div class="flex-1 flex items-center justify-center text-slate-400">
+                Belum ada pasien
+            </div>
+            @endif
         </div>
 
-        {{-- Ringkasan --}}
-        <div class="grid grid-cols-1 gap-3 text-sm">
-            <div class="rounded-xl bg-indigo-50 border border-indigo-100 p-4">
-                <p class="text-xs text-slate-500">Jenis Pemeriksaan</p>
-                <p class="font-medium text-slate-800">Anatomi</p>
-            </div>
-
-            <div class="rounded-xl bg-indigo-50 border border-indigo-100 p-4">
-                <p class="text-xs text-slate-500">Estimasi Waktu Tunggu</p>
-                <p class="font-medium text-slate-800">± 60 menit</p>
-            </div>
-
-            <div class="rounded-xl bg-indigo-50 border border-indigo-100 p-4">
-                <p class="text-xs text-slate-500">Lokasi Ruang</p>
-                <p class="font-medium text-slate-800">Ruang B</p>
-            </div>
-        </div>
-
-        {{-- Antrian Sebelumnya & Selanjutnya --}}
-        <div class="grid grid-cols-2 gap-3 pt-2">
-            <div class="rounded-xl border border-slate-200 p-4 text-center">
-                <p class="text-xs text-slate-500">Antrian Sebelumnya</p>
-                <p class="mt-1 font-semibold text-slate-800">A003</p>
-            </div>
-            <div class="rounded-xl border border-slate-200 p-4 text-center">
-                <p class="text-xs text-slate-500">Antrian Selanjutnya</p>
-                <p class="mt-1 font-semibold text-slate-800">A005</p>
-            </div>
-        </div>
-    </div>
-
-</section>
-
+    </section>
 
 </div>
 <script>

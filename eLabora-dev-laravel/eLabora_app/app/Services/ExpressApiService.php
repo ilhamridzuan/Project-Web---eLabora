@@ -159,6 +159,7 @@ class ExpressApiService
     // LIST HASIL PEMERIKSAAN
     public function listByPatient(int $pasienId): array
     {
+        /** @var \Illuminate\Http\Client\Response $response */
         $response = $this->client()
             ->get("{$this->baseUrl}/exams/patients/{$pasienId}");
 
@@ -171,6 +172,7 @@ class ExpressApiService
 
     public function detail(int $id): array
     {
+        /** @var \Illuminate\Http\Client\Response $response */
         $response = $this->client()
             ->get("{$this->baseUrl}/exams/{$id}");
 

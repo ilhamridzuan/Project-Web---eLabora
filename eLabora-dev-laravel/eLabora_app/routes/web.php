@@ -12,6 +12,7 @@ use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\DashboardDokterController;
 use App\Http\Controllers\PasienController;  
 use App\Http\Controllers\HasilPemeriksaanController;
+use App\Http\Controllers\PasienDashboardController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -28,9 +29,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 // PASIEN (wajib login + role pasien)
 Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
-    Route::get('/dashboard-pasien', function () {
-        return view('pages.pasien.dashboard');
-    })->name('dashboard.pasien');
+    Route::get('/dashboard-pasien', [PasienDashboardController::class, 'index'])->name('pasien.dashboard');
 
     Route::get('/pendaftaran', [PendaftaranController::class, 'index'])->name('pasien.pendaftaran.index');
     Route::post('/pendaftaran', [PendaftaranController::class, 'store'])->name('pasien.pendaftaran.store');
