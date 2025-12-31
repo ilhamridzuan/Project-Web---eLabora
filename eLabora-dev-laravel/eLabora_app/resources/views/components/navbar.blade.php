@@ -4,16 +4,6 @@
         <img src="{{ asset('assets/images/logo/Logo.png') }}" alt="Logo elabora" class="h-[42px] w-auto" />
     </div>
 
-    {{-- Search --}}
-    <div class="w-full max-w-[400px] mx-6">
-        <div class="flex items-center px-3 py-2 rounded-md border border-slate-300 bg-slate-50">
-            <input
-                type="text"
-                placeholder="Search"
-                class="w-full bg-transparent outline-none text-sm text-slate-500 placeholder:text-slate-400" />
-        </div>
-    </div>
-
     {{-- Profile + Logout --}}
     <div class="flex items-center gap-3">
         {{-- Profile picture --}}

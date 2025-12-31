@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Pasien;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardPetugasController;
@@ -7,6 +8,8 @@ use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\PemeriksaanController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AntrianPasienController;
+use App\Http\Controllers\DashboardDokterController;
+use App\Http\Controllers\PasienController;  
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -54,7 +57,6 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
 });
 // DOKTER
 Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {
-    Route::get('/dashboard-dokter', function () {
-        return view('pages.dokter.dashboard');
-    })->name('dashboard.dokter');
+    Route::get('/dashboard-dokter',  [DashboardDokterController::class, 'index'] )->name('dashboard.dokter');
+    Route::get('/pasien-dokter', [PasienController::class, 'index'])->name('pasien.dokter');
 });
