@@ -8,6 +8,7 @@ use App\Http\Controllers\AntrianController;
 use App\Http\Controllers\PemeriksaanController;
 use App\Http\Controllers\PendaftaranController;
 use App\Http\Controllers\AntrianPasienController;
+use App\Http\Controllers\RiwayatController;
 use App\Http\Controllers\DashboardDokterController;
 use App\Http\Controllers\PasienController;  
 
@@ -39,9 +40,8 @@ Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
         return view('pages.pasien.hasilPemeriksaan');
     })->name('hasil.pemeriksaan');
 
-    Route::get('/riwayat', function () {
-        return view('pages.pasien.riwayat');
-    })->name('riwayat');
+    Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
+
 });
 
 // PETUGAS
