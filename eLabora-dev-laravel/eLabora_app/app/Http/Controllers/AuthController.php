@@ -11,11 +11,10 @@ class AuthController extends Controller
     {
         return view('auth.login');
     }
-    
 
     public function login(Request $request, ExpressApiService $api)
     {
-        // Sesuaikan dengan validator API: username + password min 6 :contentReference[oaicite:8]{index=8}
+        // username + password
         $data = $request->validate([
             'username' => ['required', 'string', 'max:50'],
             'password' => ['required', 'string', 'min:6'],
@@ -29,7 +28,6 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        // API kamu mengembalikan {token, role} :contentReference[oaicite:9]{index=9}
         $json = $resp->json();
 
         session([
@@ -42,8 +40,8 @@ class AuthController extends Controller
 
         $map = [
             'PASIEN'  => '/dashboard-pasien',
-            'DOKTER' => '/dashboard-dokter',
-            'PETUGAS'   => '/dashboard-petugas', // kalau kamu anggap admin = petugas (sesuaikan)
+            'DOKTER'  => '/dashboard-dokter',
+            'PETUGAS' => '/dashboard-petugas',
         ];
 
         $routeName = $map[$role] ?? 'login';
@@ -60,7 +58,7 @@ class AuthController extends Controller
 
     public function register(Request $request, ExpressApiService $api)
     {
-        // Sesuaikan dengan Joi registerPasienSchema :contentReference[oaicite:10]{index=10}
+        // FIX UTAMA: tambahkan jenis_kelamin agar tidak null
         $data = $request->validate([
             'username' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:120'],
@@ -68,12 +66,16 @@ class AuthController extends Controller
 
             'nik' => ['required', 'string', 'size:16'],
             'nama' => ['required', 'string', 'max:100'],
+
+            // ✅ INI FIX-NYA
+            'jenis_kelamin' => ['required', 'in:L,P'],
+
             'tgl_lahir' => ['nullable', 'date'],
             'alamat' => ['nullable', 'string', 'max:255'],
             'no_telepon' => ['nullable', 'string', 'max:20'],
         ]);
 
-        // API kamu menerima tgl_lahir format YYYY-MM-DD string :contentReference[oaicite:11]{index=11}
+        // API menerima tgl_lahir format YYYY-MM-DD
         if (!empty($data['tgl_lahir'])) {
             $data['tgl_lahir'] = date('Y-m-d', strtotime($data['tgl_lahir']));
         } else {
@@ -88,7 +90,6 @@ class AuthController extends Controller
                 ->withInput();
         }
 
-        // API kamu return {id, role, token} (auto-login) :contentReference[oaicite:12]{index=12}
         $json = $resp->json();
 
         session([
@@ -100,7 +101,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect()->route('dashboard.pasien')->with('success', 'Register berhasil');
+        return redirect()->route('pasien.dashboard')->with('success', 'Register berhasil');
     }
 
     public function logout(Request $request)

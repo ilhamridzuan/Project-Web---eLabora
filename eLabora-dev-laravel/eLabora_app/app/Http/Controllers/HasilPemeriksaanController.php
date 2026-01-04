@@ -31,20 +31,39 @@ class HasilPemeriksaanController extends Controller
 
         // ambil data dari API
         $items = $this->api->listByPatient($pasienId);
+        if (!is_array($items)) $items = [];
+
+        /**
+         * ======================================================
+         * FILTER UTAMA (YANG DIMINTA):
+         * hanya tampilkan status_hasil = 'HASIL_TERSEDIA'
+         * ======================================================
+         * dibuat robust: trim + uppercase + dukung key alternatif
+         */
+        $items = array_filter($items, function ($item) {
+            $status =
+                $item['status_hasil'] ??
+                $item['statusHasil'] ??
+                null;
+
+            $status = strtoupper(trim((string) $status));
+            return $status === 'HASIL_TERSEDIA';
+        });
 
         // FILTER KATEGORI
         if ($kategori !== 'semua') {
             $items = array_filter($items, function ($item) use ($kategori) {
-                return strtolower($item['kategori_nama'] ?? '') === $kategori;
+                return strtolower(trim((string)($item['kategori_nama'] ?? ''))) === $kategori;
             });
         }
 
         // FILTER NOMOR LAB
         if ($q !== '') {
-            $items = array_filter($items, function ($item) use ($q) {
+            $qLower = strtolower($q);
+            $items = array_filter($items, function ($item) use ($qLower) {
                 return str_contains(
-                    strtolower($item['no_lab'] ?? ''),
-                    strtolower($q)
+                    strtolower((string)($item['no_lab'] ?? '')),
+                    $qLower
                 );
             });
         }

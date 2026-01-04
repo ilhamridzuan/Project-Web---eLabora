@@ -3,7 +3,7 @@ $items = [
 ['label' => 'Beranda', 'url' => url('/dashboard-petugas')],
 ['label' => 'Manajemen Pemeriksaan', 'url' => url('/pemeriksaan')],
 ['label' => 'Manajemen Antrian', 'url' => url('/antrian')],
-['label' => 'Manajemen Pasien', 'url' => url('/pasien-petugas')],
+['label' => 'Manajemen Pasien', 'url' => url('/pasien')],
 ];
 
 $currentUrl = url()->current();

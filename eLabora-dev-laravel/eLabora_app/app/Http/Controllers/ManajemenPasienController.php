@@ -4,55 +4,53 @@ namespace App\Http\Controllers;
 
 use App\Services\ExpressApiService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ManajemenPasienController extends Controller
 {
     public function index(Request $request, ExpressApiService $api)
     {
-        $q = $request->query('q');
+        $q = trim((string) $request->query('q'));
 
-        $res = $api->pasien(array_filter([
-            'q' => $q,
-        ], fn ($v) => $v !== null && $v !== ''));
+        // Ambil data dari API (tanpa berharap search backend)
+        $res = $api->pasien();
 
         if (!$res->successful()) {
-            $msg = $res->json('message') ?? 'Gagal mengambil data pasien.';
             return view('pages.admin.pasien', [
                 'patients' => [],
                 'q' => $q,
-                'errorMessage' => $msg,
+                'errorMessage' => 'Gagal mengambil data pasien.',
             ]);
         }
 
         $json = $res->json();
 
-        /**
-         * Support berbagai bentuk response:
-         * 1) { data: [...] }
-         * 2) { patients: [...] }
-         * 3) { rows: [...] }
-         * 4) { data: { data: [...] } } (paginasi)
-         * 5) [...] (array langsung)
-         */
-        $patients =
-            data_get($json, 'data.data') ??
-            data_get($json, 'data') ??
-            data_get($json, 'patients') ??
-            data_get($json, 'rows');
-
-        // jika response langsung array list pasien
-        if ($patients === null && is_array($json)) {
-            // kalau ini array list (index 0 ada), ambil langsung
-            $patients = array_key_exists(0, $json) ? $json : [];
+        // API kamu: { items, page, pageSize, total }
+        $patients = data_get($json, 'items', []);
+        if (!is_array($patients)) {
+            $patients = [];
         }
 
-        // kalau ternyata single object pasien, bungkus jadi array
-        if (is_array($patients) && !array_key_exists(0, $patients) && !empty($patients)) {
-            $patients = [ $patients ];
+        /**
+         * =============================
+         * FILTERING MANUAL (SEARCH)
+         * =============================
+         */
+        if ($q !== '') {
+            $qLower = Str::lower($q);
+
+            $patients = array_values(array_filter($patients, function ($p) use ($qLower) {
+                return
+                    Str::contains(Str::lower($p['nama'] ?? ''), $qLower) ||
+                    Str::contains(Str::lower($p['nik'] ?? ''), $qLower) ||
+                    Str::contains(Str::lower($p['no_telepon'] ?? ''), $qLower) ||
+                    Str::contains(Str::lower($p['username'] ?? ''), $qLower) ||
+                    Str::contains(Str::lower($p['email'] ?? ''), $qLower);
+            }));
         }
 
         return view('pages.admin.pasien', [
-            'patients' => is_array($patients) ? $patients : [],
+            'patients' => $patients,
             'q' => $q,
             'errorMessage' => null,
         ]);

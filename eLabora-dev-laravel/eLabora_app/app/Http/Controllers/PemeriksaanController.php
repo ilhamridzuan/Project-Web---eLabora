@@ -7,122 +7,110 @@ use Illuminate\Http\Request;
 
 class PemeriksaanController extends Controller
 {
-    public function index(Request $request, ExpressApiService $apiService)
+    private function kategoriList(): array
+    {
+        return [
+            ['id' => 1, 'nama' => 'Patologi'],
+            ['id' => 2, 'nama' => 'Anatomi'],
+            ['id' => 3, 'nama' => 'Mikrobiologi'],
+        ];
+    }
+
+    public function index(Request $request, ExpressApiService $api)
     {
         $q = $request->query('q');
         $statusHasil = $request->query('status_hasil');
-        $page = (int) $request->query('page', 1);
 
-        $meta = [
-            'page' => $page,
-            'limit' => 20,
-            'hasNext' => false,
-            'hasPrev' => $page > 1,
-        ];
+        $page  = (int) $request->query('page', 1);
+        $limit = (int) $request->query('limit', 20);
 
-        $exams = [];
-
-        $response = $apiService->examsList([
+        $res = $api->examsList(array_filter([
             'q' => $q,
             'status_hasil' => $statusHasil,
             'page' => $page,
-            'limit' => 20,
-        ]);
+            'limit' => $limit,
+        ], fn($v) => $v !== null && $v !== ''));
 
-        if ($response->successful()) {
-            $json = $response->json();
-            $exams = $json['data'] ?? [];
-            $meta = $json['meta'] ?? $meta;
-        } else {
-            // biar tidak error blank
-            $err = $response->json('message') ?? 'Gagal mengambil data pemeriksaan';
-            return redirect()->back()->with('error', $err);
+        if (!$res->successful()) {
+            $msg = $res->json('message') ?? 'Gagal mengambil data pemeriksaan.';
+            return view('pages.admin.pemeriksaan', [
+                'exams' => [],
+                'meta' => ['page' => $page, 'limit' => $limit, 'total' => 0, 'total_pages' => 1],
+                'q' => $q,
+                'statusHasil' => $statusHasil,
+                'kategoriList' => $this->kategoriList(),
+                'errorMessage' => $msg,
+            ]);
         }
+
+        $json = $res->json();
 
         return view('pages.admin.pemeriksaan', [
-            'exams' => $exams,
-            'meta' => $meta,
+            'exams' => data_get($json, 'data', []),
+            'meta' => data_get($json, 'meta', ['page' => $page, 'limit' => $limit]),
             'q' => $q,
             'statusHasil' => $statusHasil,
+            'kategoriList' => $this->kategoriList(),
+            'errorMessage' => null,
         ]);
     }
 
-    /**
-     * CREATE pemeriksaan -> POST /exams
-     * Blade: action="{{ url('/petugas/pemeriksaan') }}"
-     */
-    public function store(Request $request, ExpressApiService $apiService)
+    public function store(Request $request, ExpressApiService $api)
     {
-        $payload = $request->only([
-            'pendaftaran_id',
-            'kategori_id',
-            'dokter_id',
-            'tgl_pemeriksaan',
-            'status_validasi',
-            'status_hasil',
-            'catatan',
+        $validated = $request->validate([
+            'pendaftaran_id' => ['required', 'integer', 'min:1'],
+            'kategori_id' => ['required', 'integer', 'in:1,2,3'],
+            'catatan' => ['nullable', 'string'],
         ]);
 
-        // validasi minimal (tanpa mengubah isi form kamu)
-        $request->validate([
-            'pendaftaran_id' => ['required'],
-            'kategori_id' => ['required'],
-        ]);
+        $res = $api->createExam($validated);
 
-        $res = $apiService->createExam($payload);
-
-        if ($res->successful()) {
-            return redirect()->back()->with('success', 'Pemeriksaan berhasil dibuat.');
+        if (!$res->successful()) {
+            $msg = $res->json('message') ?? 'Gagal membuat pemeriksaan.';
+            return back()->withInput()->with('error', $msg);
         }
 
-        $msg = $res->json('message') ?? 'Gagal membuat pemeriksaan.';
-        return redirect()->back()->with('error', $msg)->withInput();
+        return back()->with('success', 'Pemeriksaan berhasil dibuat.');
     }
 
-    /**
-     * UPDATE pemeriksaan -> PATCH /exams/:id
-     * Blade: :action="`/petugas/pemeriksaan/${selectedExam.pemeriksaan_id}`"
-     */
-    public function update(Request $request, ExpressApiService $apiService, int $id)
+    public function update(Request $request, ExpressApiService $api, int $id)
     {
-        // backend Express whitelist field patch (yang lain akan diabaikan) :contentReference[oaicite:4]{index=4}
-        $patch = $request->only([
-            'dokter_id',
-            'status_validasi',
-            'status_hasil',
-            'catatan',
-            'tgl_pemeriksaan',
+        $validated = $request->validate([
+            'status_validasi' => ['required', 'string', 'in:DRAFT,TERVALIDASI'],
+            'status_hasil' => ['required', 'string', 'in:MENUNGGU_HASIL,HASIL_TERSEDIA,TIDAK_TERSEDIA'],
+            'catatan' => ['nullable', 'string'],
         ]);
 
-        $res = $apiService->patchExam($id, $patch);
+        $payload = [
+            'status_validasi' => $validated['status_validasi'],
+            'status_hasil' => $validated['status_hasil'],
+            'catatan' => $validated['catatan'] ?? null,
+        ];
 
-        if ($res->successful()) {
-            return redirect()->back()->with('success', 'Pemeriksaan berhasil diperbarui.');
+        $res = $api->patchExam($id, $payload);
+
+        if (!$res->successful()) {
+            $msg = $res->json('message') ?? 'Gagal memperbarui pemeriksaan.';
+            return back()->with('error', $msg);
         }
 
-        $msg = $res->json('message') ?? 'Gagal memperbarui pemeriksaan.';
-        return redirect()->back()->with('error', $msg)->withInput();
+        return back()->with('success', 'Pemeriksaan berhasil diperbarui.');
     }
 
-    /**
-     * UPLOAD file -> POST /exams/:id/files (field: file)
-     * Blade: :action="`/petugas/pemeriksaan/${selectedExam.pemeriksaan_id}/file`"
-     */
-    public function uploadFile(Request $request, ExpressApiService $apiService, int $id)
+
+    public function uploadFile(Request $request, ExpressApiService $api, int $id)
     {
-        $request->validate([
-            'file' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png'],
+        $validated = $request->validate([
+            'file' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'], // max 5MB
         ]);
 
-        $file = $request->file('file');
+        $res = $api->uploadExamFile($id, $validated['file']);
 
-        $res = $apiService->uploadExamFile($id, $file);
-
-        if ($res->successful()) {
-            return redirect()->back()->with('success', 'File pemeriksaan berhasil diupload.');
+        if (!$res->successful()) {
+            $msg = $res->json('message') ?? 'Gagal upload file pemeriksaan.';
+            return back()->with('error', $msg);
         }
 
-        $msg = $res->json('message') ?? 'Gagal upload file pemeriksaan.';
-        return redirect()->back()->with('error', $msg);
+        return back()->with('success', 'File pemeriksaan berhasil diupload.');
     }
 }

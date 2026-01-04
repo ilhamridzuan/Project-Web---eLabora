@@ -1,92 +1,119 @@
 @extends('layouts.app', ['sidebar' => 'dokter'])
 
-@section('title', 'Manajemen Pasien')
+@section('title', 'Pasien')
 
 @section('content')
-<div class="max-w-6xl mx-auto">
+<div class="space-y-6">
 
-    {{-- Header --}}
-    <div class="flex items-center gap-4 mb-6">
-        <img src="{{ asset('assets/images/logo/Logo.png') }}" class="h-12">
+    {{-- HEADER --}}
+    <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <h1 class="text-lg font-semibold text-gray-800">
-                Manajemen Pasien
-            </h1>
-            <p class="text-sm text-gray-500">
-                Daftar pasien dan detail pemeriksaan
-            </p>
+            <h2 class="text-2xl font-semibold text-slate-800">Pasien</h2>
+            <p class="mt-1 text-sm text-slate-500">Daftar pasien yang dapat diakses oleh dokter.</p>
         </div>
+
+        {{-- SEARCH --}}
+        <form method="GET" action="{{ route('pasien.dokter') }}" class="w-full sm:w-[520px]">
+            <div class="flex gap-2">
+                <div class="relative w-full">
+                    <input
+                        type="text"
+                        name="q"
+                        value="{{ $q ?? '' }}"
+                        placeholder="Cari nama / NIK / no. telepon..."
+                        class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 pr-10 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300" />
+                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z" />
+                        </svg>
+                    </span>
+                </div>
+
+                <button
+                    type="submit"
+                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition">
+                    Cari
+                </button>
+
+                @if(($q ?? '') !== '')
+                    <a
+                        href="{{ route('pasien.dokter') }}"
+                        class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition">
+                        Reset
+                    </a>
+                @endif
+            </div>
+        </form>
     </div>
 
-    {{-- SEARCH --}}
-    <form method="GET" action="{{ url()->current() }}" class="mb-4">
-        <div class="relative max-w-sm">
-            <span class="absolute inset-y-0 left-3 flex items-center text-gray-400">
-                <svg xmlns="http://www.w3.org/2000/svg"
-                    class="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 104.5 4.5a7.5 7.5 0 0012.15 12.15z" />
-                </svg>
-            </span>
-
-            <input
-                type="text"
-                id="searchInput"
-                name="search"
-                value="{{ request('search') }}"
-                placeholder="Cari pasien"
-                class="w-full pl-9 pr-3 py-2 border rounded-lg text-sm
-                    focus:ring-indigo-500 focus:border-indigo-500"
-            >
+    {{-- ALERT --}}
+    @if(!empty($errorMessage))
+        <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800 text-sm">
+            {{ $errorMessage }}
         </div>
-    </form>
+    @endif
 
-
-
-    {{-- DAFTAR PASIEN --}}
-    <div class="bg-white rounded-xl shadow overflow-hidden mb-6">
-        <div class="px-6 py-4 border-b">
-            <h2 class="font-semibold text-gray-800">Daftar Pasien</h2>
-        </div>
-
+    {{-- TABLE --}}
+    <div class="rounded-xl bg-white shadow-sm border border-slate-200 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full text-sm">
-                <thead class="bg-gray-50 text-gray-600">
-                    <tr>
-                        <th class="px-6 py-3 text-left">Nama</th>
-                        <th class="px-6 py-3 text-left">NIK</th>
-                        <th class="px-6 py-3 text-left">Email</th>
-                        <th class="px-6 py-3 text-right">Aksi</th>
+                <thead class="bg-slate-50 border-b border-slate-200">
+                    <tr class="text-center">
+                        <th class="px-4 py-3 w-16">No</th>
+                        <th class="px-4 py-3 text-left">Pasien</th>
+                        <th class="px-4 py-3">NIK</th>
+                        <th class="px-4 py-3">Username</th>
+                        <th class="px-4 py-3">No. Telepon</th>
+                        <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Tgl Lahir</th>
+                        <th class="px-4 py-3 w-[180px]">Aksi</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y">
+
+                <tbody class="divide-y divide-slate-100">
                     @forelse($patients as $p)
-                        <tr class="hover:bg-gray-50 {{ request('pasien') == $p['id'] ? 'bg-indigo-50' : '' }}">
-                            <td class="px-6 py-4 font-medium">
-                                {{ $p['nama'] }}
+                        @php
+                            $id = $p['id'] ?? null;
+                        @endphp
+
+                        <tr class="hover:bg-slate-50/60">
+                            <td class="px-4 py-3 text-center text-slate-600">{{ $loop->iteration }}</td>
+
+                            <td class="px-4 py-3 text-left">
+                                <div class="font-medium text-slate-800">
+                                    <a
+                                        href="{{ route('dokter.pasien.pemeriksaan', ['id' => $id]) }}"
+                                        class="hover:underline"
+                                    >
+                                        {{ $p['nama'] ?? '-' }}
+                                    </a>
+                                </div>
+                                <div class="text-xs text-slate-500">ID: {{ $id }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $p['nik'] }}
+
+                            <td class="px-4 py-3 text-center">{{ $p['nik'] ?? '-' }}</td>
+                            <td class="px-4 py-3 text-center">{{ $p['username'] ?? '-' }}</td>
+                            <td class="px-4 py-3 text-center">{{ $p['no_telepon'] ?? '-' }}</td>
+                            <td class="px-4 py-3 text-center">{{ $p['email'] ?? '-' }}</td>
+                            <td class="px-4 py-3 text-center">
+                                {{ isset($p['tgl_lahir']) ? substr($p['tgl_lahir'],0,10) : '-' }}
                             </td>
-                            <td class="px-6 py-4">
-                                {{ $p['email'] }}
-                            </td>
-                            <td class="px-6 py-4 text-right">
-                                <a href="?pasien={{ $p['id'] }}"
-                                   class="px-4 py-2 text-xs border rounded-lg hover:bg-gray-100">
-                                    Lihat Detail
+
+                            <td class="px-4 py-3 text-center">
+                                <a
+                                    href="{{ route('dokter.pasien.pemeriksaan', ['id' => $id]) }}"
+                                    class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700 transition"
+                                >
+                                    Lihat Pemeriksaan
                                 </a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-10 text-center text-gray-400">
-                                Tidak ada pasien
+                            <td colspan="8" class="px-4 py-10 text-center">
+                                <p class="text-sm font-semibold text-slate-700">Belum ada data pasien</p>
+                                <p class="text-xs text-slate-500 mt-1">Data pasien akan muncul di sini.</p>
                             </td>
                         </tr>
                     @endforelse
@@ -94,34 +121,6 @@
             </table>
         </div>
     </div>
-
-    {{-- DETAIL PASIEN --}}
-    @if($selectedPatient)
-        <div class="bg-white rounded-xl shadow p-6">
-            <h2 class="font-semibold text-gray-800 mb-4">
-                Detail Pasien – {{ $selectedPatient['nama'] }}
-            </h2>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <p class="text-xs text-gray-500">NIK</p>
-                    <p class="font-medium">{{ $selectedPatient['nik'] }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-gray-500">Tanggal Lahir</p>
-                    <p class="font-medium">{{ $selectedPatient['tgl_lahir'] }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-gray-500">No Telepon</p>
-                    <p class="font-medium">{{ $selectedPatient['no_telepon'] }}</p>
-                </div>
-                <div>
-                    <p class="text-xs text-gray-500">Email</p>
-                    <p class="font-medium">{{ $selectedPatient['email'] }}</p>
-                </div>
-            </div>
-        </div>
-    @endif
 
 </div>
 @endsection
