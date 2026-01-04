@@ -39,11 +39,9 @@ Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
 
     Route::get('/antrian-pasien', [AntrianPasienController::class, 'index'])->name('antrian.pasien');
 
-    Route::get('/hasil-pemeriksaan', [HasilPemeriksaanController::class, 'index'])
-        ->name('hasil.pemeriksaan');
+    Route::get('/hasil-pemeriksaan', [HasilPemeriksaanController::class, 'index'])->name('hasil.pemeriksaan');
 
-    Route::get('/detail-pemeriksaan/{id}', [HasilPemeriksaanController::class, 'show'])
-        ->name('detail.pemeriksaan');
+    Route::get('/detail-pemeriksaan/{id}', [HasilPemeriksaanController::class, 'show'])->name('detail.pemeriksaan');
 
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
 });
@@ -64,19 +62,16 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
     // Manajemen Pasien
     Route::get('/pasien', [ManajemenPasienController::class, 'index'])->name('petugas.pasien');
     // Pemeriksaan milik pasien tertentu
-    Route::get('/pasien/{id}/pemeriksaan', [PasienPemeriksaanController::class, 'index'])
-        ->name('petugas.pasien.pemeriksaan');
+    Route::get('/petugas/pasien/{id}/pemeriksaan', [PasienPemeriksaanController::class, 'index'])
+    ->name('petugas.pasien.pemeriksaan');
     // Update exam (edit dari halaman pasien)
-    Route::patch('/pasien/exams/{examId}', [PasienPemeriksaanController::class, 'updateExam'])
-        ->name('petugas.pasien.exams.update');
+    Route::patch('/pasien/exams/{examId}', [PasienPemeriksaanController::class, 'updateExam'])->name('petugas.pasien.exams.update');
     // Upload file exam (dari halaman pasien)
-    Route::post('/pasien/exams/{examId}/file', [PasienPemeriksaanController::class, 'uploadExamFile'])
-        ->name('petugas.pasien.exams.upload');
+    Route::post('/pasien/exams/{examId}/file', [PasienPemeriksaanController::class, 'uploadExamFile'])->name('petugas.pasien.exams.upload');
 });
 // DOKTER
 Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {
     Route::get('/dashboard-dokter',  [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
     Route::get('/pasien-dokter', [PasienController::class, 'index'])->name('pasien.dokter');
-    Route::get('/pasien/{id}/pemeriksaan', [DokterPemeriksaanController::class, 'index'])
-        ->name('dokter.pasien.pemeriksaan');
+    Route::get('/dokter/pasien/{id}/pemeriksaan', [DokterPemeriksaanController::class, 'index'])->name('dokter.pasien.pemeriksaan');
 });
