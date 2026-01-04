@@ -27,6 +27,15 @@ class ExpressApiService
         return Http::withHeaders($headers);
     }
 
+    /**
+     * Build full URL safely.
+     */
+    private function url(string $path): string
+    {
+        $path = '/' . ltrim($path, '/');
+        return "{$this->baseUrl}{$path}";
+    }
+
     public function login(string $username, string $password): Response
     {
         /** @var Response $response */
@@ -120,7 +129,7 @@ class ExpressApiService
         /** @var Response $response */
         $response = $this->client(true)
             ->attach(
-                'surat_rujukan', // harus sama persis dengan upload.single("surat_rujukan") di API
+                'surat_rujukan',
                 file_get_contents($suratRujukan->getRealPath()),
                 $suratRujukan->getClientOriginalName()
             )
@@ -135,7 +144,6 @@ class ExpressApiService
         $response = $this->client(true)->get("{$this->baseUrl}/exams/patients/{$pasienId}");
         return $response;
     }
-
 
     public function pasien(array $params = [])
     {
@@ -183,30 +191,39 @@ class ExpressApiService
         return $response->json();
     }
 
+    /**
+     * FIX: Pastikan request menuju baseUrl Express (bukan relative URL Laravel).
+     */
     public function createExam(array $payload): Response
     {
-        /** @var \Illuminate\Http\Client\Response $response */
-        $response = $this->client(true)->post("/exams", $payload);
+        /** @var Response $response */
+        $response = $this->client(true)->post($this->url('/exams'), $payload);
         return $response;
     }
 
+    /**
+     * FIX: Pastikan request menuju baseUrl Express (bukan relative URL Laravel).
+     */
     public function patchExam(int $id, array $patch): Response
     {
-        /** @var \Illuminate\Http\Client\Response $response */
-        $response = $this->client(true)->patch("/exams/{$id}", $patch);
+        /** @var Response $response */
+        $response = $this->client(true)->patch($this->url("/exams/{$id}"), $patch);
         return $response;
     }
 
+    /**
+     * FIX: Pastikan request menuju baseUrl Express (bukan relative URL Laravel).
+     */
     public function uploadExamFile(int $id, UploadedFile $file): Response
     {
-        /** @var \Illuminate\Http\Client\Response $response */
+        /** @var Response $response */
         $response = $this->client(true)
             ->attach(
                 'file',
                 file_get_contents($file->getRealPath()),
                 $file->getClientOriginalName()
             )
-            ->post("/exams/{$id}/files");
+            ->post($this->url("/exams/{$id}/files"));
 
         return $response;
     }

@@ -14,6 +14,8 @@ use App\Http\Controllers\PasienController;
 use App\Http\Controllers\HasilPemeriksaanController;
 use App\Http\Controllers\PasienDashboardController;
 use App\Http\Controllers\ManajemenPasienController;
+use App\Http\Controllers\PasienPemeriksaanController;
+use App\Http\Controllers\DokterPemeriksaanController;
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -59,10 +61,22 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
     Route::post('/pemeriksaan', [PemeriksaanController::class, 'store']);
     Route::patch('/pemeriksaan/{id}', [PemeriksaanController::class, 'update']);
     Route::post('/pemeriksaan/{id}/file', [PemeriksaanController::class, 'uploadFile']);
-    Route::get('/pasien-petugas', [ManajemenPasienController::class, 'index'])->name('petugas.pasien');
+    // Manajemen Pasien
+    Route::get('/pasien', [ManajemenPasienController::class, 'index'])->name('petugas.pasien');
+    // Pemeriksaan milik pasien tertentu
+    Route::get('/pasien/{id}/pemeriksaan', [PasienPemeriksaanController::class, 'index'])
+        ->name('petugas.pasien.pemeriksaan');
+    // Update exam (edit dari halaman pasien)
+    Route::patch('/pasien/exams/{examId}', [PasienPemeriksaanController::class, 'updateExam'])
+        ->name('petugas.pasien.exams.update');
+    // Upload file exam (dari halaman pasien)
+    Route::post('/pasien/exams/{examId}/file', [PasienPemeriksaanController::class, 'uploadExamFile'])
+        ->name('petugas.pasien.exams.upload');
 });
 // DOKTER
 Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {
     Route::get('/dashboard-dokter',  [DashboardDokterController::class, 'index'])->name('dashboard.dokter');
     Route::get('/pasien-dokter', [PasienController::class, 'index'])->name('pasien.dokter');
+    Route::get('/pasien/{id}/pemeriksaan', [DokterPemeriksaanController::class, 'index'])
+        ->name('dokter.pasien.pemeriksaan');
 });
