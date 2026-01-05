@@ -9,7 +9,7 @@ class PasienPemeriksaanController extends Controller
 {
     public function index(int $id, Request $request, ExpressApiService $api)
     {
-        // ambil info pasien (opsional, untuk judul halaman)
+        // ambil info pasien
         $pasienName = null;
         try {
             $p = $api->pasienDetail($id);
@@ -20,7 +20,7 @@ class PasienPemeriksaanController extends Controller
                     ?? data_get($p->json(), 'name');
             }
         } catch (\Throwable $e) {
-            // ignore (tetap tampil list pemeriksaan)
+            // ignore
         }
 
         $res = $api->examsByPatient($id);

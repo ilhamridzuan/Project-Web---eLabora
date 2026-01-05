@@ -12,10 +12,8 @@ class RiwayatController extends Controller
         $kategori = strtolower((string) $request->query('kategori', 'semua'));
         $q = trim((string) $request->query('q', ''));
 
-        // 1) ambil dari session dulu
         $pasienId = (int) session('pasien_id');
 
-        // 2) kalau session hilang tapi masih punya token, coba pulihkan dari /auth/me
         if ($pasienId <= 0 && session()->has('api_token')) {
             $me = $api->authMe();
 
@@ -29,7 +27,6 @@ class RiwayatController extends Controller
             }
         }
 
-        // 3) kalau tetap tidak ada, tampilkan error
         if ($pasienId <= 0) {
             return view('pages.pasien.riwayat', [
                 'items' => [],

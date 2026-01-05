@@ -28,7 +28,7 @@
         </div>
 
         @php
-        // Nilai default biar halaman tetap aman kalau controller belum kirim data.
+        // Nilai default
         $queueStats = $queueStats ?? [
         'total' => 0,
         'menunggu' => 0,
@@ -127,8 +127,6 @@
         </div>
 
         @php
-        // Harapkan bentuk data array/collection berisi:
-        // entity, changed_by, changed_at, detail
         $auditLogs = $auditLogs ?? [];
         @endphp
 
@@ -241,7 +239,7 @@
             timer: null,
 
             formatNow() {
-                // Format Indonesia: Senin, 22 Desember 2025 • 02:15:03
+                // Format Indonesia
                 try {
                     const now = new Date();
                     const date = new Intl.DateTimeFormat('id-ID', {
@@ -260,7 +258,6 @@
 
                     this.nowText = `${date} • ${time}`;
                 } catch (e) {
-                    // fallback sederhana
                     const now = new Date();
                     this.nowText = now.toLocaleString();
                 }

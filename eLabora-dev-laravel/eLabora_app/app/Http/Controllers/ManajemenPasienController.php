@@ -12,7 +12,7 @@ class ManajemenPasienController extends Controller
     {
         $q = trim((string) $request->query('q'));
 
-        // Ambil data dari API (tanpa berharap search backend)
+        // Ambil data dari API
         $res = $api->pasien();
 
         if (!$res->successful()) {
@@ -25,16 +25,13 @@ class ManajemenPasienController extends Controller
 
         $json = $res->json();
 
-        // API kamu: { items, page, pageSize, total }
         $patients = data_get($json, 'items', []);
         if (!is_array($patients)) {
             $patients = [];
         }
 
         /**
-         * =============================
          * FILTERING MANUAL (SEARCH)
-         * =============================
          */
         if ($q !== '') {
             $qLower = Str::lower($q);

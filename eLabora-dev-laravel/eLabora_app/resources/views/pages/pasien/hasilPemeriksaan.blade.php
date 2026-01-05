@@ -4,7 +4,6 @@
 
 @section('content')
 @php
-  // Samakan pola variabel dengan riwayat.blade.php
   $kategoriAktif = $kategori ?? strtolower(request('kategori', 'semua'));
   $qAktif = $q ?? request('q', '');
   $errorMessage = $errorMessage ?? null;
@@ -59,7 +58,7 @@
     </div>
   @endif
 
-  {{-- SEARCH BAR (SAMA PERSIS RIWAYAT) --}}
+  {{-- SEARCH BAR --}}
   <form method="GET" action="{{ route('hasil.pemeriksaan') }}" class="space-y-3">
     <input type="hidden" name="kategori" value="{{ $kategoriAktif }}">
 
@@ -78,7 +77,7 @@
     </div>
   </form>
 
-  {{-- TABS (SAMA PERSIS RIWAYAT) --}}
+  {{-- TABS --}}
   <div class="flex flex-wrap gap-3">
     @foreach ($tabs as $key => $label)
       <a
@@ -92,7 +91,7 @@
     @endforeach
   </div>
 
-  {{-- LIST CARD (SAMA PERSIS RIWAYAT, tapi bisa diklik ke detail.pemeriksaan) --}}
+  {{-- LIST CARD --}}
   @if (empty($items) || count($items) === 0)
     <div class="rounded-xl border border-dashed border-gray-300 bg-white p-10 text-center">
       <p class="text-sm text-gray-600">Tidak ada hasil yang sesuai.</p>

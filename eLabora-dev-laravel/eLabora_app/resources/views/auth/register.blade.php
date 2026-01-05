@@ -30,7 +30,7 @@
                 <div class="absolute -bottom-12 -right-10 h-52 w-52 rounded-full bg-sky-400/15 blur-3xl"></div>
             </div>
 
-            {{-- GLASS CARD (lebih kentara) --}}
+            {{-- GLASS CARD --}}
             <div class="relative overflow-hidden rounded-2xl bg-white/45 backdrop-blur-3xl shadow-2xl ring-1 ring-white/70 border border-white/35 p-6">
                 <div class="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5"></div>
 

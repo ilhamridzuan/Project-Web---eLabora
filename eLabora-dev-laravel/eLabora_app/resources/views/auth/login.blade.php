@@ -29,12 +29,11 @@
         <div class="absolute -bottom-10 -right-8 h-44 w-44 rounded-full bg-sky-400/15 blur-3xl"></div>
       </div>
 
-      {{-- GLASS CARD (lebih kentara) --}}
+      {{-- GLASS CARD --}}
       <div class="relative overflow-hidden rounded-2xl bg-white/45 backdrop-blur-3xl shadow-2xl ring-1 ring-white/70 border border-white/35 p-6">
         {{-- inner edge highlight --}}
         <div class="pointer-events-none absolute inset-0 rounded-2xl ring-1 ring-black/5"></div>
 
-        {{-- GLARE / SHINE (pantulan kaca diagonal) --}}
         <div class="pointer-events-none absolute -top-24 -left-24 h-64 w-64 rotate-12 bg-white/45 blur-2xl"></div>
         <div class="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 -rotate-12 bg-indigo-200/25 blur-3xl"></div>
 

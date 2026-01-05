@@ -16,7 +16,6 @@ class PasienDashboardController extends Controller
         if ($res->successful()) {
             $json = $res->json();
 
-            // Umumnya format: { tanggal, data: [...] }
             $queues = data_get($json, 'data');
             if (!is_array($queues)) {
                 $queues = is_array($json) ? $json : [];

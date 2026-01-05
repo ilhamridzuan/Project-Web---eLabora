@@ -9,7 +9,7 @@ class DashboardPetugasController extends Controller
 {
     public function index(Request $request, ExpressApiService $apiService)
     {
-        // Default aman
+        // Default
         $queueStats = [
             'total' => 0,
             'menunggu' => 0,
