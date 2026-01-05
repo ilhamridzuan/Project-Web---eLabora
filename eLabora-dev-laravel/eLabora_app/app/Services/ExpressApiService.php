@@ -27,9 +27,6 @@ class ExpressApiService
         return Http::withHeaders($headers);
     }
 
-    /**
-     * Build full URL safely.
-     */
     private function url(string $path): string
     {
         $path = '/' . ltrim($path, '/');
@@ -121,9 +118,7 @@ class ExpressApiService
         return $response;
     }
 
-    // =========================
     // Registration (Pendaftaran)
-    // =========================
     public function registrationCreate(array $payload, UploadedFile $suratRujukan): Response
     {
         /** @var Response $response */
@@ -164,7 +159,6 @@ class ExpressApiService
         return $response;
     }
 
-    // LIST HASIL PEMERIKSAAN
     public function listByPatient(int $pasienId): array
     {
         /** @var \Illuminate\Http\Client\Response $response */
@@ -191,9 +185,6 @@ class ExpressApiService
         return $response->json();
     }
 
-    /**
-     * FIX: Pastikan request menuju baseUrl Express (bukan relative URL Laravel).
-     */
     public function createExam(array $payload): Response
     {
         /** @var Response $response */
@@ -201,9 +192,6 @@ class ExpressApiService
         return $response;
     }
 
-    /**
-     * FIX: Pastikan request menuju baseUrl Express (bukan relative URL Laravel).
-     */
     public function patchExam(int $id, array $patch): Response
     {
         /** @var Response $response */
@@ -211,9 +199,6 @@ class ExpressApiService
         return $response;
     }
 
-    /**
-     * FIX: Pastikan request menuju baseUrl Express (bukan relative URL Laravel).
-     */
     public function uploadExamFile(int $id, UploadedFile $file): Response
     {
         /** @var Response $response */

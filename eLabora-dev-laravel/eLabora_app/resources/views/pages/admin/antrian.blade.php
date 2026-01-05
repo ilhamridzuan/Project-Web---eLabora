@@ -61,7 +61,7 @@
                             if ($status === 'SELESAI') $badge = 'bg-emerald-50 text-emerald-700 border-emerald-200';
                             if ($status === 'DIBATALKAN') $badge = 'bg-rose-50 text-rose-700 border-rose-200';
 
-                            // Optional: disable actions for final states
+                            // disable actions for final states
                             $isFinal = in_array($status, ['SELESAI', 'DIBATALKAN'], true);
                         @endphp
 

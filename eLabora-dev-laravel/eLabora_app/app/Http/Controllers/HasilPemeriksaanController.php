@@ -34,11 +34,7 @@ class HasilPemeriksaanController extends Controller
         if (!is_array($items)) $items = [];
 
         /**
-         * ======================================================
-         * FILTER UTAMA (YANG DIMINTA):
          * hanya tampilkan status_hasil = 'HASIL_TERSEDIA'
-         * ======================================================
-         * dibuat robust: trim + uppercase + dukung key alternatif
          */
         $items = array_filter($items, function ($item) {
             $status =

@@ -58,18 +58,13 @@ class AuthController extends Controller
 
     public function register(Request $request, ExpressApiService $api)
     {
-        // FIX UTAMA: tambahkan jenis_kelamin agar tidak null
         $data = $request->validate([
             'username' => ['required', 'string', 'max:50'],
             'email' => ['required', 'email', 'max:120'],
             'password' => ['required', 'string', 'min:6'],
-
             'nik' => ['required', 'string', 'size:16'],
             'nama' => ['required', 'string', 'max:100'],
-
-            // ✅ INI FIX-NYA
             'jenis_kelamin' => ['required', 'in:L,P'],
-
             'tgl_lahir' => ['nullable', 'date'],
             'alamat' => ['nullable', 'string', 'max:255'],
             'no_telepon' => ['nullable', 'string', 'max:20'],

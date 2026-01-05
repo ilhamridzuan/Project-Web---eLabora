@@ -8,10 +8,9 @@ class DokterPemeriksaanController extends Controller
 {
     public function index(int $pasienId, ExpressApiService $api)
     {
-        // base URL express untuk bikin link download
         $baseUrl = rtrim(config('services.express_api.url'), '/');
 
-        // Ambil data pasien (opsional untuk judul)
+        // Ambil data pasien
         $pasienName = null;
         try {
             $p = $api->pasienDetail($pasienId);
@@ -23,7 +22,7 @@ class DokterPemeriksaanController extends Controller
             // ignore
         }
 
-        // 1) Ambil semua pemeriksaan pasien (tanpa files)
+        // Ambil semua pemeriksaan pasien (tanpa files)
         $res = $api->examsByPatient($pasienId);
 
         if (!$res->successful()) {
@@ -39,13 +38,13 @@ class DokterPemeriksaanController extends Controller
         $exams = data_get($json, 'data', []);
         if (!is_array($exams)) $exams = [];
 
-        // 2) Filter dokter: hanya HASIL_TERSEDIA
+        // Filter dokter: hanya HASIL_TERSEDIA
         $exams = array_values(array_filter($exams, function ($e) {
             return ($e['status_hasil'] ?? null) === 'HASIL_TERSEDIA';
         }));
 
-        // 3) Enrich: ambil files dari endpoint detail /exams/:id
-        //    lalu bentuk download_url dari file_path
+        // ambil files dari endpoint detail /exams/:id
+        // bentuk download_url dari file_path
         $enriched = [];
         foreach ($exams as $e) {
             $examId = $e['pemeriksaan_id'] ?? $e['id'] ?? null;
@@ -57,13 +56,12 @@ class DokterPemeriksaanController extends Controller
             }
 
             try {
-                // ExpressApiService::detail($id) sudah ada (mengarah ke GET /exams/:id)
                 $detail = $api->detail((int) $examId);
 
                 $files = data_get($detail, 'files', []);
                 if (!is_array($files)) $files = [];
 
-                // Ambil file terbaru (repository sudah ORDER BY id DESC)
+                // Ambil file terbaru
                 $latest = $files[0] ?? null;
 
                 $downloadUrl = null;
@@ -75,7 +73,6 @@ class DokterPemeriksaanController extends Controller
                 $e['files'] = $files;
                 $e['download_url'] = $downloadUrl;
             } catch (\Throwable $err) {
-                // kalau detail gagal, tetap tampilkan exam tanpa file
                 $e['files'] = [];
                 $e['download_url'] = null;
             }

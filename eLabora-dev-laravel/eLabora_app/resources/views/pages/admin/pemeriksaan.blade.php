@@ -47,7 +47,6 @@
                     class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
 
-            {{-- pertahankan filter status kalau sudah dipakai dari controller --}}
             @if(!is_null($statusHasil ?? null) && $statusHasil !== '')
             <input type="hidden" name="status_hasil" value="{{ $statusHasil }}">
             @endif

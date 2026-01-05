@@ -25,17 +25,11 @@ class PasienController extends Controller
 
         $json = $res->json();
 
-        // API: { items, page, pageSize, total }
         $patients = data_get($json, 'items', []);
         if (!is_array($patients)) {
             $patients = [];
         }
 
-        /**
-         * =============================
-         * SEARCH CLIENT-SIDE (SAMA PERSIS DENGAN PETUGAS)
-         * =============================
-         */
         if ($q !== '') {
             $qLower = Str::lower($q);
 
