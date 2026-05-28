@@ -2,35 +2,33 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'App')</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@yield('title', 'eLabora')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-slate-50">
 
-    {{-- NAVBAR (sama untuk semua) --}}
+    {{-- NAVBAR --}}
     @include('components.navbar')
 
-    {{-- BODY --}}
-    <div class="flex flex-1 pt-[60px]">
-        {{-- SIDEBAR (opsional, tergantung role) --}}
-        @isset($sidebar)
-            <aside class="w-64 bg-white shadow">
-                @include('components.sidebar.' . $sidebar)
-            </aside>
-        @endisset
+    {{-- SIDEBAR (if role specified) --}}
+    @isset($sidebar)
+        @include('components.sidebar.' . $sidebar)
+    @endisset
 
-        {{-- CONTENT --}}
-        <main class="flex-1 p-6">
+    {{-- MAIN CONTENT --}}
+    <div class="p-4 lg:ml-64 mt-14">
+        <div class="p-4 rounded-lg">
             @yield('content')
-        </main>
+        </div>
     </div>
-
-    {{-- FOOTER (sama untuk semua) --}}
-    {{-- @include('components.footer') --}}
 
     {{-- Alpine.js CDN --}}
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    {{-- Flowbite JS --}}
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@4.0.1/dist/flowbite.min.js"></script>
     
 </body>
 </html>

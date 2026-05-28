@@ -24,7 +24,7 @@ class PendaftaranController extends Controller
         $validated = $request->validate([
             'tanggal_antrian' => ['required', 'date'],
             'jadwal_pemeriksaan_at' => ['required'],
-            'surat_rujukan' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10000'],
+            'surat_rujukan' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:10000'],
         ]);
 
         // hidden jadwal formatnya: YYYY-MM-DDTHH:mm

@@ -10,7 +10,7 @@
         <div class="flex items-center gap-4">
             <img src="{{ asset('assets/images/logo/Logo.png') }}" class="h-12">
             <div>
-                <h1 class="text-lg font-semibold text-gray-800">
+                <h1 class="text-xl font-bold text-gray-900">
                     Dashboard Dokter
                 </h1>
                 <p class="text-sm text-gray-500">
@@ -20,102 +20,107 @@
         </div>
     </div>
 
-    {{-- Statistik --}}
+    {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
-        <div class="bg-indigo-600 text-white rounded-xl shadow p-5 text-center">
-            <span class="text-xs font-semibold bg-white text-indigo-600 px-3 py-1 rounded-full">
-                Aktif
-            </span>
-            <h2 class="text-3xl font-bold mt-3">
+        {{-- Current Queue Card --}}
+        <div class="block p-6 bg-primary-600 rounded-lg shadow">
+            <div class="flex items-center justify-center mb-2">
+                <span class="bg-white text-primary-600 text-xs font-semibold px-3 py-1 rounded-full">
+                    Aktif
+                </span>
+            </div>
+            <h5 class="text-4xl font-bold text-center text-white mb-2">
                 {{ $current['no_antrian'] ?? '-' }}
-            </h2>
-            <p class="text-sm">Antrian Saat Ini</p>
+            </h5>
+            <p class="text-sm text-center text-white">Antrian Saat Ini</p>
         </div>
 
-        <div class="bg-white rounded-xl shadow p-5 text-center">
-            <h2 class="text-3xl font-bold">{{ $stats['dilayani'] ?? 0 }}</h2>
-            <br>
-            <p class="text-sm text-gray-500">Pasien Dilayani Hari Ini</p>
+        {{-- Served Today Card --}}
+        <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow">
+            <h5 class="text-3xl font-bold text-center text-gray-900 mb-2">
+                {{ $stats['dilayani'] ?? 0 }}
+            </h5>
+            <p class="text-sm text-center text-gray-500">Pasien Dilayani Hari Ini</p>
         </div>
 
-        <div class="bg-white rounded-xl shadow p-5 text-center">
-            <h2 class="text-3xl font-bold">{{ $stats['menunggu'] ?? 0 }}</h2>
-            <br>
-            <p class="text-sm text-gray-500">Pasien Menunggu</p>
+        {{-- Waiting Card --}}
+        <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow">
+            <h5 class="text-3xl font-bold text-center text-gray-900 mb-2">
+                {{ $stats['menunggu'] ?? 0 }}
+            </h5>
+            <p class="text-sm text-center text-gray-500">Pasien Menunggu</p>
         </div>
 
-        <div class="bg-white rounded-xl shadow p-5 text-center">
-            <h2 class="text-3xl font-bold">{{ $stats['total'] ?? 0 }}</h2>
-            <br>
-            <p class="text-sm text-gray-500">Total Pemeriksaan</p>
+        {{-- Total Card --}}
+        <div class="block p-6 bg-white border border-gray-200 rounded-lg shadow">
+            <h5 class="text-3xl font-bold text-center text-gray-900 mb-2">
+                {{ $stats['total'] ?? 0 }}
+            </h5>
+            <p class="text-sm text-center text-gray-500">Total Pemeriksaan</p>
         </div>
-
     </div>
 
-    {{-- Konten --}}
+    {{-- Content Grid --}}
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
-        {{-- Pemeriksaan Saat Ini --}}
-        <div class="bg-white border-2 border-indigo-300 rounded-xl p-6 flex flex-col">
-            <h3 class="font-semibold mb-4">Pemeriksaan Saat Ini</h3>
+        {{-- Current Examination Card --}}
+        <div class="p-6 bg-white border-2 border-primary-300 rounded-lg shadow">
+            <h5 class="mb-4 text-lg font-bold text-gray-900">Pemeriksaan Saat Ini</h5>
 
             @if($current)
-                <div class="rounded-xl bg-indigo-50 p-4 border border-indigo-100">
-                    <div class="flex items-start justify-between gap-4">
+                <div class="p-4 bg-gradient-to-br from-primary-50 to-white border border-primary-100 rounded-lg">
+                    <div class="flex items-start justify-between gap-4 mb-4">
                         <div>
                             <p class="text-xs text-gray-500">No Antrian</p>
-                            <p class="text-2xl font-bold text-indigo-700">
+                            <p class="text-2xl font-bold text-primary-600">
                                 {{ $current['no_antrian'] }}
                             </p>
                         </div>
                         <div class="text-right">
                             <p class="text-xs text-gray-500">Ruangan</p>
-                            <p class="font-semibold text-gray-800">
+                            <p class="font-semibold text-gray-900">
                                 {{ $current['no_lab'] }}
                             </p>
                         </div>
                     </div>
 
-                    <div class="mt-4">
+                    <div class="mb-4">
                         <p class="text-xs text-gray-500">Jadwal</p>
-                        <p class="text-sm text-gray-800">
+                        <p class="text-sm text-gray-900">
                             {{ $current['jadwal_pemeriksaan_at'] }}
                         </p>
                     </div>
 
-                    <div class="mt-4">
-                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-indigo-600 text-white">
-                            {{ $current['status'] }}
-                        </span>
-                    </div>
+                    <span class="bg-primary-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                        {{ $current['status'] }}
+                    </span>
                 </div>
             @else
-                <div class="flex-1 flex items-center justify-center text-gray-400">
+                <div class="flex items-center justify-center h-32 text-gray-400">
                     Tidak ada pemeriksaan aktif
                 </div>
             @endif
         </div>
 
-        {{-- Daftar Antrian --}}
-        <div class="lg:col-span-2 bg-white rounded-xl shadow p-6">
+        {{-- Queue List --}}
+        <div class="lg:col-span-2 p-6 bg-white border border-gray-200 rounded-lg shadow">
 
             <div class="mb-4 flex items-center justify-between gap-4">
                 <div>
-                    <h3 class="font-semibold text-gray-800">
+                    <h5 class="text-lg font-bold text-gray-900">
                         Daftar Antrian Hari Ini
-                    </h3>
+                    </h5>
                     
                     <p class="text-sm text-gray-500 mt-1">
                         <span id="queue-date">{{ $tanggal ?? '-' }}</span>
                         <span class="mx-1">•</span>
-                        <span class="font-medium text-indigo-600">
+                        <span class="font-medium text-primary-600">
                             <span id="queue-time">00:00:00</span> WIB
                         </span>
                     </p>
-
                 </div>
 
-                <span class="bg-gray-100 px-3 py-1 rounded-lg text-sm">
+                <span class="bg-gray-100 text-gray-800 text-sm font-medium px-3 py-1 rounded-lg">
                     Total: {{ $stats['total'] ?? 0 }}
                 </span>
             </div>
@@ -125,20 +130,20 @@
                     @foreach($queues as $q)
                         @php
                             $status = strtoupper($q['status'] ?? '-');
-                            $badge = 'bg-gray-100 text-gray-700';
+                            $badgeClass = 'bg-gray-100 text-gray-800';
 
-                            if ($status === 'MENUNGGU') $badge = 'bg-amber-100 text-amber-700';
-                            elseif ($status === 'DILAYANI') $badge = 'bg-indigo-100 text-indigo-700';
-                            elseif ($status === 'SELESAI') $badge = 'bg-green-100 text-green-700';
+                            if ($status === 'MENUNGGU') $badgeClass = 'bg-yellow-100 text-yellow-800';
+                            elseif ($status === 'DILAYANI') $badgeClass = 'bg-blue-100 text-blue-800';
+                            elseif ($status === 'SELESAI') $badgeClass = 'bg-green-100 text-green-800';
                         @endphp
 
-                        <div class="border rounded-xl p-4 flex items-start justify-between gap-4">
+                        <div class="flex items-start justify-between gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                             <div class="flex items-center gap-3">
-                                <div class="w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center font-bold text-indigo-700">
-                                    {{ $q['no_antrian'] }}
+                                <div class="flex items-center justify-center w-12 h-12 bg-primary-50 rounded-lg">
+                                    <span class="font-bold text-primary-600">{{ $q['no_antrian'] }}</span>
                                 </div>
                                 <div>
-                                    <p class="font-semibold text-gray-800">
+                                    <p class="font-semibold text-gray-900">
                                         Ruangan {{ $q['no_lab'] }}
                                     </p>
                                     <p class="text-xs text-gray-500">
@@ -147,20 +152,21 @@
                                 </div>
                             </div>
 
-                            <span class="px-3 py-1 rounded-full text-xs font-semibold {{ $badge }}">
+                            <span class="text-xs font-medium px-2.5 py-0.5 rounded {{ $badgeClass }}">
                                 {{ $status }}
                             </span>
                         </div>
                     @endforeach
                 </div>
             @else
-                <div class="text-center text-gray-400 py-12">
+                <div class="flex items-center justify-center py-12 text-gray-400">
                     Belum ada antrian hari ini
                 </div>
             @endif
 
         </div>
     </div>
+
     <script>
         function updateDateTime() {
             const now = new Date();
