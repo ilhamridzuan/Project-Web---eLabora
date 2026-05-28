@@ -8,38 +8,28 @@
     {{-- HEADER --}}
     <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
-            <h2 class="text-2xl font-semibold text-slate-800">Manajemen Pasien</h2>
-            <p class="mt-1 text-sm text-slate-500">Daftar seluruh pasien yang terdaftar pada sistem.</p>
+            <h2 class="text-2xl font-bold text-gray-900">Manajemen Pasien</h2>
+            <p class="mt-1 text-sm text-gray-500">Daftar seluruh pasien yang terdaftar pada sistem.</p>
         </div>
 
-        {{-- SEARCH --}}
+        {{-- Flowbite Search Form --}}
         <form method="GET" action="{{ route('petugas.pasien') }}" class="w-full sm:w-[520px]">
             <div class="flex gap-2">
                 <div class="relative w-full">
-                    <input
-                        type="text"
-                        name="q"
-                        value="{{ $q ?? '' }}"
-                        placeholder="Cari nama / NIK / no. telepon..."
-                        class="w-full rounded-lg border border-slate-200 bg-white px-3 py-2 pr-10 text-sm text-slate-700 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-200 focus:border-indigo-300" />
-                    <span class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400">
-                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 1010.5 18.5a7.5 7.5 0 006.15-3.85z" />
+                    <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"/>
                         </svg>
-                    </span>
+                    </div>
+                    <input type="search" name="q" value="{{ $q ?? '' }}" class="block w-full p-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-500 focus:border-primary-500" placeholder="Cari nama / NIK / no. telepon..." />
                 </div>
 
-                <button
-                    type="submit"
-                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition">
+                <button type="submit" class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-4 py-2">
                     Cari
                 </button>
 
                 @if(($q ?? '') !== '')
-                <a
-                    href="{{ route('petugas.pasien') }}"
-                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700 shadow-sm hover:bg-slate-50 transition">
+                <a href="{{ route('petugas.pasien') }}" class="text-gray-900 bg-white border border-gray-300 hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-4 py-2">
                     Reset
                 </a>
                 @endif
@@ -47,112 +37,115 @@
         </form>
     </div>
 
-    {{-- ALERTS --}}
+    {{-- Flowbite Alerts --}}
     @if(!empty($errorMessage))
-    <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800 text-sm">
-        {{ $errorMessage }}
+    <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Error</span>
+        <div>{{ $errorMessage }}</div>
     </div>
     @endif
 
     @if(session('success'))
-    <div class="rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800 text-sm">
-        {{ session('success') }}
+    <div class="flex items-center p-4 mb-4 text-sm text-green-800 border border-green-300 rounded-lg bg-green-50" role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Success</span>
+        <div>{{ session('success') }}</div>
     </div>
     @endif
 
     @if(session('error'))
-    <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800 text-sm">
-        {{ session('error') }}
+    <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+        </svg>
+        <span class="sr-only">Error</span>
+        <div>{{ session('error') }}</div>
     </div>
     @endif
 
-    {{-- TABLE --}}
-    <div class="rounded-xl bg-white shadow-sm border border-slate-200 overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full text-sm">
-                <thead class="bg-slate-50 border-b border-slate-200">
-                    <tr class="text-center">
-                        <th class="px-4 py-3 w-16">No</th>
-                        <th class="px-4 py-3 text-left">Pasien</th>
-                        <th class="px-4 py-3">NIK</th>
-                        <th class="px-4 py-3">Username</th>
-                        <th class="px-4 py-3">No. Telepon</th>
-                        <th class="px-4 py-3">Email</th>
-                        <th class="px-4 py-3">Tgl Lahir</th>
-                        <th class="px-4 py-3 w-[180px]">Aksi</th>
-                    </tr>
-                </thead>
+    {{-- Flowbite Table --}}
+    <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+        <table class="w-full text-sm text-left text-gray-500">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                <tr>
+                    <th scope="col" class="px-6 py-3 text-center">No</th>
+                    <th scope="col" class="px-6 py-3">Pasien</th>
+                    <th scope="col" class="px-6 py-3 text-center">NIK</th>
+                    <th scope="col" class="px-6 py-3 text-center">Username</th>
+                    <th scope="col" class="px-6 py-3 text-center">No. Telepon</th>
+                    <th scope="col" class="px-6 py-3 text-center">Email</th>
+                    <th scope="col" class="px-6 py-3 text-center">Tgl Lahir</th>
+                    <th scope="col" class="px-6 py-3 text-center">Aksi</th>
+                </tr>
+            </thead>
 
-                <tbody class="divide-y divide-slate-100">
-                    @forelse(($patients ?? []) as $p)
-                    @php
-                    $id = $p['id'] ?? null;
-                    $nama = $p['nama'] ?? '-';
-                    $nik = $p['nik'] ?? '-';
-                    $username = $p['username'] ?? '-';
-                    $telp = $p['no_telepon'] ?? '-';
-                    $email = $p['email'] ?? '-';
-                    $tglLahir = $p['tgl_lahir'] ?? null;
-                    $tglLahirText = $tglLahir ? substr($tglLahir, 0, 10) : '-';
-                    @endphp
+            <tbody>
+                @forelse(($patients ?? []) as $p)
+                @php
+                $id = $p['id'] ?? null;
+                $nama = $p['nama'] ?? '-';
+                $nik = $p['nik'] ?? '-';
+                $username = $p['username'] ?? '-';
+                $telp = $p['no_telepon'] ?? '-';
+                $email = $p['email'] ?? '-';
+                $tglLahir = $p['tgl_lahir'] ?? null;
+                $tglLahirText = $tglLahir ? substr($tglLahir, 0, 10) : '-';
+                @endphp
 
-                    <tr class="hover:bg-slate-50/60">
-                        <td class="px-4 py-3 text-slate-600 tabular-nums text-center">
-                            {{ $loop->iteration }}
-                        </td>
+                <tr class="bg-white border-b hover:bg-gray-50">
+                    <td class="px-6 py-4 text-center text-gray-900">
+                        {{ $loop->iteration }}
+                    </td>
 
-                        <td class="px-4 py-3 text-left">
-                            <div class="font-medium text-slate-800">
-                                @if($id)
-                                <a
-                                    href="{{ route('petugas.pasien.pemeriksaan', ['id' => $id]) }}"
-                                    class="hover:underline"
-                                    title="Lihat pemeriksaan pasien">
-                                    {{ $nama }}
-                                </a>
-                                @else
-                                {{ $nama }}
-                                @endif
-                            </div>
-                            @if($id)
-                            <div class="text-xs text-slate-500">ID: {{ $id }}</div>
-                            @endif
-                        </td>
+                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap">
+                        @if($id)
+                        <a href="{{ route('petugas.pasien.pemeriksaan', ['id' => $id]) }}" class="hover:underline text-primary-600" title="Lihat pemeriksaan pasien">
+                            {{ $nama }}
+                        </a>
+                        @else
+                        {{ $nama }}
+                        @endif
+                        @if($id)
+                        <div class="text-xs text-gray-500 font-normal">ID: {{ $id }}</div>
+                        @endif
+                    </th>
 
-                        <td class="px-4 py-3 text-slate-700 text-center tabular-nums">{{ $nik }}</td>
-                        <td class="px-4 py-3 text-slate-700 text-center">{{ $username }}</td>
-                        <td class="px-4 py-3 text-slate-700 text-center tabular-nums">{{ $telp }}</td>
-                        <td class="px-4 py-3 text-slate-700 text-center">{{ $email }}</td>
-                        <td class="px-4 py-3 text-slate-600 text-center">{{ $tglLahirText }}</td>
+                    <td class="px-6 py-4 text-center">{{ $nik }}</td>
+                    <td class="px-6 py-4 text-center">{{ $username }}</td>
+                    <td class="px-6 py-4 text-center">{{ $telp }}</td>
+                    <td class="px-6 py-4 text-center">{{ $email }}</td>
+                    <td class="px-6 py-4 text-center">{{ $tglLahirText }}</td>
 
-                        <td class="px-4 py-3 text-center">
-                            @if($id)
-                            <a
-                                href="{{ route('petugas.pasien.pemeriksaan', ['id' => $id]) }}"
-                                class="inline-flex items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-indigo-700 transition">
-                                Lihat Pemeriksaan
-                            </a>
-                            @else
-                            <span class="text-xs text-slate-400">-</span>
-                            @endif
-                        </td>
-                    </tr>
-                    @empty
-                    <tr>
-                        <td colspan="8" class="px-4 py-10 text-center">
-                            <p class="text-sm font-semibold text-slate-700">Belum ada data pasien</p>
-                            <p class="text-xs text-slate-500 mt-1">Data akan muncul setelah pasien terdaftar di sistem.</p>
-                        </td>
-                    </tr>
-                    @endforelse
-                </tbody>
-            </table>
-        </div>
+                    <td class="px-6 py-4 text-center">
+                        @if($id)
+                        <a href="{{ route('petugas.pasien.pemeriksaan', ['id' => $id]) }}" class="font-medium text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-xs px-3 py-2 text-center inline-flex items-center">
+                            Lihat Pemeriksaan
+                        </a>
+                        @else
+                        <span class="text-xs text-gray-400">-</span>
+                        @endif
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="8" class="px-6 py-10 text-center">
+                        <p class="text-sm font-semibold text-gray-700">Belum ada data pasien</p>
+                        <p class="text-xs text-gray-500 mt-1">Data akan muncul setelah pasien terdaftar di sistem.</p>
+                    </td>
+                </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
 
-    {{-- OPTIONAL META INFO --}}
+    {{-- Meta Info --}}
     @if(!empty($meta))
-    <div class="text-xs text-slate-500">
+    <div class="text-xs text-gray-500">
         Menampilkan {{ count($patients ?? []) }} data • Total {{ $meta['total'] ?? '-' }} • Page {{ $meta['page'] ?? '-' }}
     </div>
     @endif
