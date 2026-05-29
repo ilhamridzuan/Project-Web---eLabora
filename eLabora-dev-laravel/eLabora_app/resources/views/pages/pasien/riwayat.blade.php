@@ -150,7 +150,7 @@ default => 'bg-orange-100 text-orange-700',
 
               <div class="mt-3">
                 @if(!empty($it['pendaftaran_id']))
-                  <a href="{{ route('surat.rujukan.download', ['id' => $it['pendaftaran_id']]) }}" 
+                  <a href="{{ route('registrations.download', ['id' => $it['pendaftaran_id']]) }}" 
                      target="_blank"
                      class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300">
                     <span class="icon-[tabler--download] w-3 h-3 me-1.5"></span>
