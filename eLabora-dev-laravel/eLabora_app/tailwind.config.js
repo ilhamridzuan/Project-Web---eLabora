@@ -1,3 +1,5 @@
+import { addIconSelectors } from '@iconify/tailwind4';
+
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
@@ -26,6 +28,7 @@ export default {
     },
   },
   plugins: [
-    require('flowbite/plugin')
+    require('flowbite/plugin'),
+    addIconSelectors(['tabler'])
   ],
 }

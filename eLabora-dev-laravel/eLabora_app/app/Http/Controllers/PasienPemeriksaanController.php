@@ -23,6 +23,18 @@ class PasienPemeriksaanController extends Controller
             // ignore
         }
 
+        // Fetch patient's registrations using the new endpoint
+        $registrations = [];
+        try {
+            $regRes = $api->get("/patients/{$id}/registrations");
+            if ($regRes->successful()) {
+                $registrations = data_get($regRes->json(), 'data', []);
+                if (!is_array($registrations)) $registrations = [];
+            }
+        } catch (\Throwable $e) {
+            // ignore
+        }
+
         $res = $api->examsByPatient($id);
 
         if (!$res->successful()) {
@@ -31,6 +43,7 @@ class PasienPemeriksaanController extends Controller
                 'pasienId' => $id,
                 'pasienName' => $pasienName,
                 'exams' => [],
+                'registrations' => $registrations,
                 'errorMessage' => $msg,
             ]);
         }
@@ -43,6 +56,7 @@ class PasienPemeriksaanController extends Controller
             'pasienId' => $id,
             'pasienName' => $pasienName,
             'exams' => $exams,
+            'registrations' => $registrations,
             'errorMessage' => null,
         ]);
     }
@@ -83,5 +97,24 @@ class PasienPemeriksaanController extends Controller
         }
 
         return back()->with('success', 'File pemeriksaan berhasil diupload.');
+    }
+
+    public function downloadSuratRujukan(int $id, ExpressApiService $api)
+    {
+        $res = $api->get("/registrations/{$id}/surat-rujukan/download");
+
+        if (!$res->successful()) {
+            $msg = $res->json('message') ?? 'Gagal mengambil surat rujukan.';
+            return back()->with('error', $msg);
+        }
+
+        $url = data_get($res->json(), 'url');
+        
+        if (!$url) {
+            return back()->with('error', 'URL download tidak ditemukan.');
+        }
+
+        // Redirect to the SAS URL for download
+        return redirect($url);
     }
 }

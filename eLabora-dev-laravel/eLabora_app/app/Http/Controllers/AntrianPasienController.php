@@ -61,11 +61,23 @@ class AntrianPasienController extends Controller
             $current = $dilayaniList[0];
         }
 
+        $pasienId = (int) session('pasien_id');
+        if ($pasienId <= 0) {
+            $profileResp = $apiService->authMe();
+            if ($profileResp->successful()) {
+                $pasienId = $profileResp->json('profil.id') ?? 0;
+                if ($pasienId > 0) {
+                    session(['pasien_id' => $pasienId]);
+                }
+            }
+        }
+
         return view('pages.pasien.antrian', [
             'tanggal' => $tanggal,
             'queues' => $queues,
             'stats' => $stats,
             'current' => $current,
+            'myPasienId' => $pasienId,
         ]);
     }
 }

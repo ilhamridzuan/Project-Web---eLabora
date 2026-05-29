@@ -5,6 +5,13 @@
 @section('content')
 <div class="space-y-6">
 
+    {{-- Breadcrumb Navigation --}}
+    <x-breadcrumb :items="[
+        ['label' => 'Beranda', 'url' => route('dashboard.dokter')],
+        ['label' => 'Pasien', 'url' => route('pasien.dokter')],
+        ['label' => 'Hasil Pemeriksaan', 'url' => null]
+    ]" />
+
     {{-- HEADER --}}
     <div class="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
         <div>
@@ -19,9 +26,7 @@
         </div>
 
         <a href="{{ route('pasien.dokter') }}" class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-900 bg-white border border-gray-300 rounded-lg hover:bg-gray-100 hover:text-primary-700 focus:z-10 focus:ring-4 focus:outline-none focus:ring-gray-100">
-            <svg class="w-3 h-3 me-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5H1m0 0 4 4M1 5l4-4"/>
-            </svg>
+            <span class="icon-[tabler--arrow-left] w-3 h-3 me-2 rtl:rotate-180"></span>
             Kembali
         </a>
     </div>
@@ -29,9 +34,7 @@
     {{-- Flowbite Alert --}}
     @if($errorMessage)
     <div class="flex items-center p-4 mb-4 text-sm text-red-800 border border-red-300 rounded-lg bg-red-50" role="alert">
-        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-        </svg>
+        <span class="icon-[tabler--info-circle] flex-shrink-0 inline w-4 h-4 me-3"></span>
         <span class="sr-only">Error</span>
         <div>{{ $errorMessage }}</div>
     </div>
@@ -92,10 +95,7 @@
 
                         @if($downloadUrl)
                         <a href="{{ $downloadUrl }}" target="_blank" class="inline-flex items-center font-medium text-white bg-green-600 hover:bg-green-700 focus:ring-4 focus:outline-none focus:ring-green-300 rounded-lg text-xs px-3 py-2">
-                            <svg class="w-3 h-3 me-1.5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M14.707 7.793a1 1 0 0 0-1.414 0L11 10.086V1.5a1 1 0 0 0-2 0v8.586L6.707 7.793a1 1 0 1 0-1.414 1.414l4 4a1 1 0 0 0 1.416 0l4-4a1 1 0 0 0-.002-1.414Z"/>
-                                <path d="M18 12h-2.55l-2.975 2.975a3.5 3.5 0 0 1-4.95 0L4.55 12H2a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-4a2 2 0 0 0-2-2Zm-3 5a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"/>
-                            </svg>
+                            <span class="icon-[tabler--download] w-3 h-3 me-1.5"></span>
                             Download
                         </a>
                         @else

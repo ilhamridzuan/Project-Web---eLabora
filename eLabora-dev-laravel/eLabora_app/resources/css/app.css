@@ -12,6 +12,7 @@
 @source "../../node_modules/flowbite";
 
 @plugin "flowbite/plugin";
+@plugin "@iconify/tailwind4";
 
 
 @theme {
