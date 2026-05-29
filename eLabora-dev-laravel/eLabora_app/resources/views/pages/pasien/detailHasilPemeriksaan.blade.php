@@ -67,7 +67,7 @@
             <h3 class="text-lg font-bold text-gray-900 mb-3">Surat Rujukan</h3>
 
             @if(!empty($data['pendaftaran_id']))
-                <a href="{{ route('surat.rujukan.download', ['id' => $data['pendaftaran_id']]) }}" 
+                <a href="{{ route('registrations.download', ['id' => $data['pendaftaran_id']]) }}" 
                    target="_blank"
                    class="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg hover:bg-gray-100">
                     <div class="flex items-center">

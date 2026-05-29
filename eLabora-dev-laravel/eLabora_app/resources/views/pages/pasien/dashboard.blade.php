@@ -129,7 +129,7 @@
                             <td class="px-6 py-4">{{ $waktu }}</td>
                             <td class="px-6 py-4">
                                 @if(!empty($q['id']) || !empty($q['pendaftaran_id']))
-                                    <a href="{{ route('surat.rujukan.download', ['id' => $q['id'] ?? $q['pendaftaran_id']]) }}" 
+                                    <a href="{{ route('registrations.download', ['id' => $q['id'] ?? $q['pendaftaran_id']]) }}" 
                                        target="_blank"
                                        class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300">
                                         <span class="icon-[tabler--download] w-3 h-3 me-1.5"></span>
