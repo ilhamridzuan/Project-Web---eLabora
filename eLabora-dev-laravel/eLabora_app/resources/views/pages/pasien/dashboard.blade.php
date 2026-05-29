@@ -36,17 +36,13 @@
         <!-- Slider controls -->
         <button type="button" class="absolute top-0 start-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-prev>
             <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 1 1 5l4 4"/>
-                </svg>
+                <span class="icon-[tabler--chevron-left] w-4 h-4 text-white rtl:rotate-180"></span>
                 <span class="sr-only">Previous</span>
             </span>
         </button>
         <button type="button" class="absolute top-0 end-0 z-30 flex items-center justify-center h-full px-4 cursor-pointer group focus:outline-none" data-carousel-next>
             <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/30 group-hover:bg-white/50 group-focus:ring-4 group-focus:ring-white group-focus:outline-none">
-                <svg class="w-4 h-4 text-white rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 6 10">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 9 4-4-4-4"/>
-                </svg>
+                <span class="icon-[tabler--chevron-right] w-4 h-4 text-white rtl:rotate-180"></span>
                 <span class="sr-only">Next</span>
             </span>
         </button>
@@ -57,9 +53,7 @@
         <a href="{{ url('/pendaftaran') }}" class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 transition-all hover:shadow-lg">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-indigo-100">
-                    <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path>
-                    </svg>
+                    <span class="icon-[tabler--calendar-plus] w-6 h-6 text-indigo-600"></span>
                 </div>
                 <h5 class="text-xl font-semibold tracking-tight text-gray-900">Pendaftaran</h5>
             </div>
@@ -68,10 +62,7 @@
         <a href="{{ url('/hasil-pemeriksaan') }}" class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 transition-all hover:shadow-lg">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-indigo-100">
-                    <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z"></path>
-                        <path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd"></path>
-                    </svg>
+                    <span class="icon-[tabler--clipboard-text] w-6 h-6 text-indigo-600"></span>
                 </div>
                 <h5 class="text-xl font-semibold tracking-tight text-gray-900">Cek Hasil Pemeriksaan</h5>
             </div>
@@ -80,9 +71,7 @@
         <a href="{{ url('/riwayat') }}" class="block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 transition-all hover:shadow-lg">
             <div class="flex items-center gap-4">
                 <div class="flex items-center justify-center w-12 h-12 rounded-lg bg-indigo-100">
-                    <svg class="w-6 h-6 text-indigo-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                    </svg>
+                    <span class="icon-[tabler--history] w-6 h-6 text-indigo-600"></span>
                 </div>
                 <h5 class="text-xl font-semibold tracking-tight text-gray-900">Riwayat Pemeriksaan</h5>
             </div>
@@ -107,6 +96,7 @@
                             <th scope="col" class="px-6 py-3">Jenis Pemeriksaan</th>
                             <th scope="col" class="px-6 py-3">Status</th>
                             <th scope="col" class="px-6 py-3">Waktu</th>
+                            <th scope="col" class="px-6 py-3">Surat Rujukan</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -123,12 +113,7 @@
 
                         $jenis = $q['kategori_nama'] ?? $q['kategori'] ?? $q['no_lab'] ?? '-';
 
-                        $waktu = '-';
-                        if (!empty($q['jadwal_pemeriksaan_at'])) {
-                            try {
-                                $waktu = \Carbon\Carbon::parse($q['jadwal_pemeriksaan_at'])->format('H:i');
-                            } catch (\Throwable $e) {}
-                        }
+                        $waktu = formatTime($q['jadwal_pemeriksaan_at'] ?? null);
                         @endphp
 
                         <tr class="bg-white border-b hover:bg-gray-50">
@@ -142,10 +127,22 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4">{{ $waktu }}</td>
+                            <td class="px-6 py-4">
+                                @if(!empty($q['id']) || !empty($q['pendaftaran_id']))
+                                    <a href="{{ route('surat.rujukan.download', ['id' => $q['id'] ?? $q['pendaftaran_id']]) }}" 
+                                       target="_blank"
+                                       class="inline-flex items-center px-3 py-2 text-xs font-medium text-center text-white bg-indigo-600 rounded-lg hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300">
+                                        <span class="icon-[tabler--download] w-3 h-3 me-1.5"></span>
+                                        Download
+                                    </a>
+                                @else
+                                    <span class="text-xs text-gray-400">-</span>
+                                @endif
+                            </td>
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="4" class="px-6 py-10 text-center">
+                            <td colspan="5" class="px-6 py-10 text-center">
                                 <p class="text-sm font-semibold text-gray-700">Belum ada antrian hari ini</p>
                                 <p class="text-xs text-gray-500 mt-1">Data antrian akan tampil ketika ada pendaftaran.</p>
                             </td>
@@ -189,11 +186,7 @@
                     <div class="p-3 bg-white border border-gray-200 rounded-lg text-right">
                         <p class="text-xs text-gray-500">Jadwal</p>
                         <p class="mt-1 font-semibold text-gray-900 text-xs">
-                            @if(!empty($current['jadwal_pemeriksaan_at']))
-                            {{ \Carbon\Carbon::parse($current['jadwal_pemeriksaan_at'])->format('d M Y, H:i') }}
-                            @else
-                            -
-                            @endif
+                            {{ formatDateTime($current['jadwal_pemeriksaan_at'] ?? null) }}
                         </p>
                     </div>
                 </div>

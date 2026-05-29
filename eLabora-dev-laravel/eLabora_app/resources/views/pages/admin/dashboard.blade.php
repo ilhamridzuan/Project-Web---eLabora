@@ -5,6 +5,12 @@
 @section('content')
 <div class="space-y-8">
 
+    {{-- Breadcrumb Navigation --}}
+    <x-breadcrumb :items="[
+        ['label' => 'Beranda', 'url' => route('dashboard.petugas')],
+        ['label' => 'Dashboard', 'url' => null]
+    ]" />
+
     {{-- Header --}}
     <div>
         <h2 class="text-2xl font-bold text-gray-900">Dashboard Petugas</h2>
@@ -46,10 +52,8 @@
                             {{ $queueStats['total'] ?? 0 }}
                         </p>
                     </div>
-                    <div class="flex items-center justify-center w-10 h-10 bg-primary-100 rounded-lg">
-                        <svg class="w-5 h-5 text-primary-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3M5 11h14M7 21h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
+                    <div class="flex items-center justify-center w-10 h-10 bg-indigo-100 rounded-lg">
+                        <span class="icon-[tabler--calendar-stats] w-5 h-5 text-primary-600"></span>
                     </div>
                 </div>
                 <p class="text-xs text-gray-500">Jumlah seluruh pendaftaran antrian hari ini.</p>
@@ -65,9 +69,7 @@
                         </p>
                     </div>
                     <div class="flex items-center justify-center w-10 h-10 bg-yellow-100 rounded-lg">
-                        <svg class="w-5 h-5 text-yellow-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <span class="icon-[tabler--clock-hour-3] w-5 h-5 text-yellow-600"></span>
                     </div>
                 </div>
                 <p class="text-xs text-gray-500">Antrian yang belum diproses/selesai.</p>
@@ -83,9 +85,7 @@
                         </p>
                     </div>
                     <div class="flex items-center justify-center w-10 h-10 bg-green-100 rounded-lg">
-                        <svg class="w-5 h-5 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m7 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <span class="icon-[tabler--circle-check] w-5 h-5 text-green-600"></span>
                     </div>
                 </div>
                 <p class="text-xs text-gray-500">Antrian yang sudah diproses sampai selesai.</p>
@@ -101,9 +101,7 @@
                         </p>
                     </div>
                     <div class="flex items-center justify-center w-10 h-10 bg-red-100 rounded-lg">
-                        <svg class="w-5 h-5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <span class="icon-[tabler--circle-x] w-5 h-5 text-red-600"></span>
                     </div>
                 </div>
                 <p class="text-xs text-gray-500">Antrian yang dibatalkan pada hari ini.</p>
@@ -162,7 +160,7 @@
                             {{ $changedBy }}
                         </td>
                         <td class="px-6 py-4">
-                            {{ $changedAt }}
+                            {{ formatDateTime($changedAt) }}
                         </td>
                         <td class="px-6 py-4 text-left">
                             {{ $detail }}

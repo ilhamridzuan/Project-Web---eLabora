@@ -42,6 +42,10 @@ Route::middleware(['requireAuth', 'requireRole:PASIEN'])->group(function () {
     Route::get('/hasil-pemeriksaan', [HasilPemeriksaanController::class, 'index'])->name('hasil.pemeriksaan');
 
     Route::get('/detail-pemeriksaan/{id}', [HasilPemeriksaanController::class, 'show'])->name('detail.pemeriksaan');
+    
+    Route::get('/pemeriksaan/{examId}/files/{fileId}/download', [HasilPemeriksaanController::class, 'downloadFile'])->name('pemeriksaan.file.download');
+    
+    Route::get('/registrations/{id}/surat-rujukan/download', [PasienDashboardController::class, 'downloadSuratRujukan'])->name('surat.rujukan.download');
 
     Route::get('/riwayat', [RiwayatController::class, 'index'])->name('riwayat');
 });
@@ -59,6 +63,7 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
     Route::post('/pemeriksaan', [PemeriksaanController::class, 'store']);
     Route::patch('/pemeriksaan/{id}', [PemeriksaanController::class, 'update']);
     Route::post('/pemeriksaan/{id}/file', [PemeriksaanController::class, 'uploadFile']);
+    Route::delete('/pemeriksaan/{id}', [PemeriksaanController::class, 'destroy']);
     // Manajemen Pasien
     Route::get('/pasien', [ManajemenPasienController::class, 'index'])->name('petugas.pasien');
     // Pemeriksaan milik pasien tertentu
@@ -68,6 +73,8 @@ Route::middleware(['requireAuth', 'requireRole:PETUGAS'])->group(function () {
     Route::patch('/pasien/exams/{examId}', [PasienPemeriksaanController::class, 'updateExam'])->name('petugas.pasien.exams.update');
     // Upload file exam (dari halaman pasien)
     Route::post('/pasien/exams/{examId}/file', [PasienPemeriksaanController::class, 'uploadExamFile'])->name('petugas.pasien.exams.upload');
+    // Download surat rujukan
+    Route::get('/registrations/{id}/surat-rujukan/download', [PasienPemeriksaanController::class, 'downloadSuratRujukan'])->name('registrations.download');
 });
 // DOKTER
 Route::middleware(['requireAuth', 'requireRole:DOKTER'])->group(function () {

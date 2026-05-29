@@ -5,6 +5,12 @@
 @section('content')
 <div class="max-w-6xl mx-auto">
 
+    {{-- Breadcrumb Navigation --}}
+    <x-breadcrumb :items="[
+        ['label' => 'Beranda', 'url' => route('dashboard.dokter')],
+        ['label' => 'Dashboard', 'url' => null]
+    ]" />
+
     {{-- Header --}}
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
         <div class="flex items-center gap-4">
@@ -23,7 +29,7 @@
     {{-- Statistics Cards --}}
     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         {{-- Current Queue Card --}}
-        <div class="block p-6 bg-primary-600 rounded-lg shadow">
+        <div class="block p-6 bg-indigo-600 rounded-lg shadow">
             <div class="flex items-center justify-center mb-2">
                 <span class="bg-white text-primary-600 text-xs font-semibold px-3 py-1 rounded-full">
                     Aktif
@@ -91,7 +97,7 @@
                         </p>
                     </div>
 
-                    <span class="bg-primary-600 text-white text-xs font-medium px-3 py-1 rounded-full">
+                    <span class="bg-indigo-600 text-white text-xs font-medium px-3 py-1 rounded-full">
                         {{ $current['status'] }}
                     </span>
                 </div>
@@ -139,7 +145,7 @@
 
                         <div class="flex items-start justify-between gap-4 p-4 border border-gray-200 rounded-lg hover:bg-gray-50">
                             <div class="flex items-center gap-3">
-                                <div class="flex items-center justify-center w-12 h-12 bg-primary-50 rounded-lg">
+                                <div class="flex items-center justify-center w-12 h-12 bg-indigo-50 rounded-lg">
                                     <span class="font-bold text-primary-600">{{ $q['no_antrian'] }}</span>
                                 </div>
                                 <div>

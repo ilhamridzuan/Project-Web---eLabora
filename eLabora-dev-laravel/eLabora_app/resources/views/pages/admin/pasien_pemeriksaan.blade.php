@@ -63,6 +63,73 @@
     </div>
     @endif
 
+    {{-- Registrations Section --}}
+    <div class="p-6 bg-white border border-gray-200 rounded-lg shadow">
+        <div class="flex items-center justify-between mb-4">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900">Daftar Pendaftaran Pasien</h3>
+                <p class="text-sm text-gray-500 mt-1">Pendaftaran yang dapat dibuatkan pemeriksaan</p>
+            </div>
+        </div>
+
+        @if(!empty($registrations) && count($registrations) > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($registrations as $reg)
+            <div class="p-4 border border-gray-200 rounded-lg hover:border-indigo-300 hover:shadow-md transition-all">
+                <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="icon-[tabler--file-text] w-5 h-5 text-indigo-600"></span>
+                            <span class="text-sm font-semibold text-gray-900">ID: {{ $reg['id'] ?? '-' }}</span>
+                        </div>
+                        <div class="space-y-1 text-xs text-gray-600">
+                            <p><span class="font-medium">No. Antrian:</span> {{ $reg['no_antrian'] ?? '-' }}</p>
+                            <p><span class="font-medium">No. Lab:</span> {{ $reg['no_lab'] ?? '-' }}</p>
+                            <p><span class="font-medium">Tanggal:</span> {{ formatDate($reg['tanggal_antrian'] ?? null) }}</p>
+                            <p><span class="font-medium">Status:</span> 
+                                <span class="px-2 py-0.5 rounded text-xs font-medium {{ ($reg['status'] ?? '') === 'DISETUJUI' ? 'bg-green-100 text-green-800' : (($reg['status'] ?? '') === 'MENUNGGU' ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800') }}">
+                                    {{ $reg['status'] ?? '-' }}
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <a href="{{ route('pemeriksaan.petugas') }}?pendaftaran_id={{ $reg['id'] }}" 
+                       class="flex-1 inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:ring-4 focus:outline-none focus:ring-indigo-300">
+                        <span class="icon-[tabler--plus] w-3.5 h-3.5 me-1.5"></span>
+                        Buat Pemeriksaan
+                    </a>
+                    @if(!empty($reg['file_path']))
+                    <a href="{{ route('registrations.download', ['id' => $reg['id']]) }}" 
+                       target="_blank"
+                       class="inline-flex items-center justify-center px-3 py-2 text-xs font-medium text-indigo-700 bg-white border border-indigo-300 hover:bg-indigo-50 rounded-lg focus:ring-4 focus:outline-none focus:ring-indigo-300"
+                       title="Download Surat Rujukan">
+                        <span class="icon-[tabler--download] w-3.5 h-3.5"></span>
+                    </a>
+                    @endif
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="flex flex-col items-center justify-center py-8">
+            <div class="w-12 h-12 mb-3 rounded-full bg-gray-100 flex items-center justify-center">
+                <span class="icon-[tabler--file-off] w-6 h-6 text-gray-400"></span>
+            </div>
+            <p class="text-sm font-semibold text-gray-700">Belum ada pendaftaran</p>
+            <p class="text-xs text-gray-500 mt-1">Pasien belum melakukan pendaftaran</p>
+        </div>
+        @endif
+    </div>
+
+    {{-- Examinations Section --}}
+    <div class="space-y-3">
+        <div>
+            <h3 class="text-lg font-bold text-gray-900">Riwayat Pemeriksaan</h3>
+            <p class="text-sm text-gray-500 mt-1">Daftar pemeriksaan yang sudah dibuat</p>
+        </div>
+
     {{-- Flowbite Table --}}
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-center text-gray-500">
@@ -101,11 +168,11 @@
 
                     <td class="px-6 py-4">
                         <div class="flex gap-2 justify-center">
-                            <button type="button" @click="openDetail = true; selectedExam = {{ json_encode($exam) }}" class="font-medium text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-xs px-3 py-2">
+                            <button type="button" @click="openDetail = true; selectedExam = {{ json_encode($exam) }}" class="font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:ring-4 focus:outline-none focus:ring-indigo-300 rounded-lg text-xs px-3 py-2">
                                 Detail / Edit
                             </button>
 
-                            <button type="button" @click="openUpload = true; selectedExam = {{ json_encode($exam) }}" class="font-medium text-primary-700 bg-white border border-primary-300 hover:bg-primary-50 focus:ring-4 focus:outline-none focus:ring-primary-300 rounded-lg text-xs px-3 py-2">
+                            <button type="button" @click="openUpload = true; selectedExam = {{ json_encode($exam) }}" class="font-medium text-indigo-700 bg-white border border-indigo-300 hover:bg-indigo-50 focus:ring-4 focus:outline-none focus:ring-indigo-300 rounded-lg text-xs px-3 py-2">
                                 Upload
                             </button>
                         </div>
@@ -121,6 +188,7 @@
                 @endforelse
             </tbody>
         </table>
+    </div>
     </div>
 
     {{-- Flowbite Modal EDIT --}}
@@ -160,7 +228,7 @@
                             <textarea name="catatan" id="catatan_edit2" rows="3" x-model="selectedExam.catatan" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500"></textarea>
                         </div>
                     </div>
-                    <button type="submit" class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <button type="submit" class="text-white inline-flex items-center bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Simpan
                     </button>
                 </form>
@@ -203,7 +271,7 @@
                             <p class="mt-1 text-xs text-gray-500">Maks 5MB. Format: PDF, JPG, PNG.</p>
                         </div>
                     </div>
-                    <button type="submit" :disabled="!fileName" :class="!fileName ? 'opacity-60 cursor-not-allowed' : ''" class="text-white inline-flex items-center bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
+                    <button type="submit" :disabled="!fileName" :class="!fileName ? 'opacity-60 cursor-not-allowed' : ''" class="text-white inline-flex items-center bg-indigo-700 hover:bg-indigo-800 focus:ring-4 focus:outline-none focus:ring-indigo-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center">
                         Upload
                     </button>
                 </form>
