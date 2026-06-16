@@ -93,7 +93,7 @@
                     <div class="mb-4">
                         <p class="text-xs text-gray-500">Jadwal</p>
                         <p class="text-sm text-gray-900">
-                            {{ $current['jadwal_pemeriksaan_at'] }}
+                            {{ formatDateTime($current['jadwal_pemeriksaan_at'] ?? null) }}
                         </p>
                     </div>
 
@@ -153,7 +153,7 @@
                                         Ruangan {{ $q['no_lab'] }}
                                     </p>
                                     <p class="text-xs text-gray-500">
-                                        Jadwal: {{ $q['jadwal_pemeriksaan_at'] }}
+                                        Jadwal: {{ formatDateTime($q['jadwal_pemeriksaan_at'] ?? null) }}
                                     </p>
                                 </div>
                             </div>

@@ -4,7 +4,10 @@
  * DateHelper - Helper functions untuk formatting tanggal dan waktu
  * 
  * Format standar: "31 Desember 2025, 14:30 WIB"
- * Timezone: Asia/Jakarta (WIB)
+ * 
+ * Catatan: API backend sudah mengembalikan waktu dalam zona waktu
+ * Asia/Jakarta (WIB) tanpa suffix 'Z', sehingga TIDAK perlu
+ * dilakukan konversi timezone lagi saat menampilkan.
  */
 
 use Carbon\Carbon;
@@ -24,7 +27,6 @@ if (!function_exists('formatDateTime')) {
 
         try {
             return Carbon::parse($date)
-                ->timezone('Asia/Jakarta')
                 ->translatedFormat('d F Y, H:i') . ' WIB';
         } catch (\Exception $e) {
             return '-';
@@ -47,7 +49,6 @@ if (!function_exists('formatDate')) {
 
         try {
             return Carbon::parse($date)
-                ->timezone('Asia/Jakarta')
                 ->translatedFormat('d F Y');
         } catch (\Exception $e) {
             return '-';
@@ -70,7 +71,6 @@ if (!function_exists('formatTime')) {
 
         try {
             return Carbon::parse($date)
-                ->timezone('Asia/Jakarta')
                 ->format('H:i') . ' WIB';
         } catch (\Exception $e) {
             return '-';
@@ -93,7 +93,6 @@ if (!function_exists('formatDateShort')) {
 
         try {
             return Carbon::parse($date)
-                ->timezone('Asia/Jakarta')
                 ->translatedFormat('d M Y');
         } catch (\Exception $e) {
             return '-';
@@ -117,7 +116,6 @@ if (!function_exists('formatRelative')) {
         try {
             Carbon::setLocale('id');
             return Carbon::parse($date)
-                ->timezone('Asia/Jakarta')
                 ->diffForHumans();
         } catch (\Exception $e) {
             return '-';
@@ -140,7 +138,6 @@ if (!function_exists('formatDateTimeShort')) {
 
         try {
             return Carbon::parse($date)
-                ->timezone('Asia/Jakarta')
                 ->translatedFormat('d M Y, H:i');
         } catch (\Exception $e) {
             return '-';
